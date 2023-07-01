@@ -1,0 +1,2 @@
+# EasyTaskerServer
+Server app
