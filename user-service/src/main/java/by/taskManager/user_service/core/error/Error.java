@@ -5,9 +5,9 @@ public class Error {
     private String message;
 
 
-    public Error(String message, String logref) {
+    public Error(String message) {
         this.message = message;
-        this.logref = logref;
+        this.logref = "error";
     }
 
     public String getMessage() {

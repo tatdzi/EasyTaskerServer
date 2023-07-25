@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public class PageOfUserDTO<S,T> {
+public class PageDTO<S,T> {
     private Integer number;
     private Integer size;
     private Integer total_pages;
@@ -14,8 +14,8 @@ public class PageOfUserDTO<S,T> {
     private boolean last;
     private List<T> content;
 
-    public PageOfUserDTO(Page<S> page,
-                         List<T> content) {
+    public PageDTO(Page<S> page,
+                   List<T> content) {
         this.number = page.getNumber();
         this.size = page.getSize();
         this.total_pages = page.getTotalPages();

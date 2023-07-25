@@ -1,4 +1,4 @@
-package by.taskManager.user_service.core;
+package by.taskManager.user_service.core.serializator;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

@@ -1,6 +1,6 @@
 package by.taskManager.user_service.endpoints.web.controllers;
 
-import by.taskManager.user_service.core.dto.PageOfUserDTO;
+import by.taskManager.user_service.core.dto.PageDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.core.dto.UserDTO;
 import by.taskManager.user_service.service.api.IUserService;
@@ -26,8 +26,8 @@ private IUserService userService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PageOfUserDTO> doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                @RequestParam(name = "size", defaultValue = "20") Integer size){
+    public ResponseEntity<PageDTO> doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(name = "size", defaultValue = "20") Integer size){
         return new ResponseEntity<>(userService.getCard(page,size),HttpStatus.OK) ;
     }
 

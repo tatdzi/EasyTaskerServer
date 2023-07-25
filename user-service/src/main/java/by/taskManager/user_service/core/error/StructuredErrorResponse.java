@@ -6,8 +6,8 @@ public class StructuredErrorResponse{
     private String logref;
     private List<StructuredError> errors;
 
-    public StructuredErrorResponse(String logref, List<StructuredError> errors) {
-        this.logref = logref;
+    public StructuredErrorResponse(List<StructuredError> errors) {
+        this.logref = "strucrured_error";
         this.errors = errors;
     }
 

@@ -7,7 +7,9 @@ CREATE TABLE app.users
     password text NOT NULL,
     fio text NOT NULL,
     role text NOT NULL,
-    status text NOT NULL
+    status text NOT NULL,
+        constraint mail
+            unique (mail),
 );
 
 ALTER TABLE IF EXISTS app.users

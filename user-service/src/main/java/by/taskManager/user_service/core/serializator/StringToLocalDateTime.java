@@ -1,4 +1,4 @@
-package by.taskManager.user_service;
+package by.taskManager.user_service.core.serializator;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

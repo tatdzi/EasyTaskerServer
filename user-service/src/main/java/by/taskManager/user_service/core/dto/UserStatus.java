@@ -1,4 +1,4 @@
-package by.taskManager.user_service.core.enums;
+package by.taskManager.user_service.core.dto;
 
 public enum UserStatus {
     WAITING_ACTIVATION,

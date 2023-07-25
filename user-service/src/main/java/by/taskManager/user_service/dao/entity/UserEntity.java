@@ -1,8 +1,8 @@
 package by.taskManager.user_service.dao.entity;
 
 import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.enums.UserRole;
-import by.taskManager.user_service.core.enums.UserStatus;
+import by.taskManager.user_service.core.dto.UserRole;
+import by.taskManager.user_service.core.dto.UserStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,7 +29,7 @@ public class UserEntity {
     private String fio;
     private UserRole role;
     private UserStatus status;
-    private String code;
+
 
     public UserEntity() {
     }
@@ -40,16 +40,8 @@ public class UserEntity {
         this.fio = dto.getFio();
         this.role = UserRole.valueOf(dto.getRole());
         this.status = UserStatus.valueOf(dto.getStatus());
-        this.code = dto.getCode();
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public UUID getUuid() {
         return uuid;

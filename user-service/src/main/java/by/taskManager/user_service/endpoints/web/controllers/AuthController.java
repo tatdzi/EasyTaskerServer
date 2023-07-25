@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/users")
 public class AuthController {
@@ -26,9 +28,9 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @RequestMapping(value = "/verification",method = RequestMethod.GET)
-    public ResponseEntity<?> verification(@RequestParam String code,
+    public ResponseEntity<?> verification(@RequestParam UUID uuid,
                                    @RequestParam String mail){
-        authService.auth(mail,code);
+        authService.auth(uuid,mail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

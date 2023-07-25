@@ -2,7 +2,9 @@ package by.taskManager.user_service.endpoints.web.controllers;
 
 import by.taskManager.user_service.core.error.Error;
 import by.taskManager.user_service.core.error.ErrorResponse;
-import by.taskManager.user_service.core.error.StrcturedErrorException;
+import by.taskManager.user_service.core.exception.DtUpdateNotCorrectException;
+import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
+import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.core.error.StructuredErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +19,21 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class,HttpMessageNotReadableException.class})
+    @ExceptionHandler(value = {
+            MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class,
+            IllegalArgumentException.class,
+            NotCorrectUUIDException.class,
+            DtUpdateNotCorrectException.class})
     public ResponseEntity<List<Error>> handler(Exception e){
         ErrorResponse exception = new ErrorResponse();
-        exception.setError(new Error("Запрос содержит некорректные данные. Измените запрос и отправьте его ещё раз","error"));
-        exception.setError(new Error(e.toString(),"error"));
-        Throwable cases = e.getCause();
-        while (cases != null){
-            exception.setError(new Error(cases.getMessage(),"error"));
-            cases = cases.getCause();
-        }
+        exception.setError(new Error("Запрос содержит некорректные данные. Измените запрос и отправьте его ещё раз"));
+        exception.setError(new Error(e.getMessage()));
         return new ResponseEntity<>(exception.getErrors(), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler
     public ResponseEntity<StructuredErrorResponse> handler(StrcturedErrorException exception){
-        StructuredErrorResponse errorResponse = new StructuredErrorResponse(exception.getLogref(),exception.getErrors());
+        StructuredErrorResponse errorResponse = new StructuredErrorResponse(exception.getErrors());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -41,13 +43,8 @@ public class GlobalExceptionHandler {
             RuntimeException.class,})
     public ResponseEntity<List<Error>> handler5(Exception e){
         ErrorResponse exception = new ErrorResponse();
-        exception.setError(new Error("Сервер не смог корректно обработать запрос. Пожалуйста обратитесь к администратору","error"));
-        exception.setError(new Error(e.toString(),"error"));
-        Throwable cases = e.getCause();
-        while (cases != null){
-            exception.setError(new Error(cases.getMessage(),"error"));
-            cases = cases.getCause();
-        }
+        exception.setError(new Error("Сервер не смог корректно обработать запрос. Пожалуйста обратитесь к администратору"));
+        exception.setError(new Error(e.getMessage()));
         return new ResponseEntity<>(exception.getErrors(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

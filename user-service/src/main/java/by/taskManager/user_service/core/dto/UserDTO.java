@@ -1,7 +1,6 @@
 package by.taskManager.user_service.core.dto;
 
-import by.taskManager.user_service.core.LocalDateTimeSerializer;
-import by.taskManager.user_service.core.enums.UserRole;
+import by.taskManager.user_service.core.serializator.LocalDateTimeSerializer;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
