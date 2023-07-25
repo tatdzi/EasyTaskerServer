@@ -14,6 +14,9 @@ public class AuditEntity {
     private EssenceType type;
     private String id;
 
+    public AuditEntity() {
+    }
+
     public AuditEntity(UUID uuid, LocalDateTime dt_create, UserDTO user, String text, EssenceType type, String id) {
         this.uuid = uuid;
         this.dt_create = dt_create;
@@ -45,5 +48,29 @@ public class AuditEntity {
 
     public String getId() {
         return id;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setDt_create(LocalDateTime dt_create) {
+        this.dt_create = dt_create;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setType(EssenceType type) {
+        this.type = type;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

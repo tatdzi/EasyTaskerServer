@@ -1,5 +1,7 @@
 package by.taskManager.auditservice.core.dto;
 
+import by.taskManager.auditservice.dao.entity.AuditEntity;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -19,6 +21,17 @@ public class AuditDTO {
         this.type = type;
         this.id = id;
     }
+
+    public AuditDTO(AuditEntity entity) {
+        this.uuid = entity.getUuid();
+        this.dt_create = entity.getDt_create();
+        this.user = entity.getUser();
+        this.text = entity.getText();
+        this.type = entity.getType();
+        this.id = entity.getId();
+    }
+
+
 
     public UUID getUuid() {
         return uuid;
