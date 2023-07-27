@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SecurityService {
@@ -26,6 +27,10 @@ public class SecurityService {
             auditDTOS.add(new AuditDTO(entity));
         }
         return new PageDTO<>(pageResponse,auditDTOS);
+    }
+    public AuditEntity getCard(UUID uuid){
+        return auditData.findById(uuid).
+                orElseThrow(()-> new NotCorrectUUIDException("Пользователь с таким uuid не найден"));
     }
 
 
