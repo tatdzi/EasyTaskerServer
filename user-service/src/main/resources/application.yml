@@ -28,3 +28,6 @@ server:
 app:
   genre:
     max-count: 20
+jwt:
+  secret: 0123456789
+  issuer: Task Manager

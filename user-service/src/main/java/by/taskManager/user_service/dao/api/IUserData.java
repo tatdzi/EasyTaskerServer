@@ -7,6 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.UUID;
 
 public interface IUserData extends CrudRepository<UserEntity,UUID> , PagingAndSortingRepository<UserEntity, UUID> {
-    UserEntity findByUuidAndMail(UUID uuid,String mail);
+    UserEntity findByMail(String mail);
     boolean existsByMail(String mail);
 }

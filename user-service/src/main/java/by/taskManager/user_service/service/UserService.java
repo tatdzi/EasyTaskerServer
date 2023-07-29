@@ -1,7 +1,6 @@
 package by.taskManager.user_service.service;
 
 import by.taskManager.user_service.core.dto.*;
-import by.taskManager.user_service.core.exception.DaoException;
 import by.taskManager.user_service.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
@@ -10,11 +9,10 @@ import by.taskManager.user_service.dao.api.IUserData;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IUserService;
 import by.taskManager.user_service.service.validation.api.Validation;
-import jakarta.validation.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void save(UserCreateDTO dto){
+    public UUID save(UserCreateDTO dto){
         validation.validation(dto);
         UserEntity entity = new UserEntity(dto);
         entity.setUuid(UUID.randomUUID());
@@ -41,12 +39,19 @@ public class UserService implements IUserService {
             errorException.setError(new StructuredError("mail","Такой адрес электронной почты уже существует"));
             throw errorException;
         }
-        save(entity);
-    }
-
-    @Override
-    public void save(UserEntity entity){
+        if (entity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
+            if (!ObjectUtils.isEmpty(dto.getMail())){
+                String message = String.format(
+                        "Welcome to Task Messager. Please, visit next link: " +
+                                "http://localhost/users/verification?code=" +
+                                entity.getUuid()+"&mail="+entity.getMail()
+                );
+                mailSender.send(dto.getMail(),"Activation code",message);
+                userService.save(entity);
+            }
+        }
         userData.save(entity);
+        return entity.getUuid();
     }
 
 
@@ -89,7 +94,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity get(UUID uuid, String mail) {
-        return userData.findByUuidAndMail(uuid,mail);
+    public UserEntity get(String mail) {
+        return userData.findByMail(mail);
     }
 }
