@@ -1,8 +1,8 @@
 package by.taskManager.user_service.service;
 
-import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.dto.UserRole;
-import by.taskManager.user_service.core.dto.UserStatus;
+import by.taskManager.user_service.core.dto.*;
+import by.taskManager.user_service.core.error.StructuredError;
+import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IAuthService;
 import by.taskManager.user_service.service.api.IUserService;
@@ -14,11 +14,13 @@ import java.util.UUID;
 public class AuthService implements IAuthService {
     private IUserService userService;
     private MailSenderService mailSender;
+    private UserHolder userHolder;
 
 
-    public AuthService(IUserService userService, MailSenderService mailSender) {
+    public AuthService(IUserService userService, MailSenderService mailSender,UserHolder userHolder) {
         this.userService = userService;
         this.mailSender = mailSender;
+        this.userHolder = userHolder;
     }
 
     @Override
@@ -37,11 +39,26 @@ public class AuthService implements IAuthService {
             userService.save(entity);
         }
     }
+    @Override
+    public TokenDTO login(LoginDTO login){
+        UserEntity entity = userService.get(login.getMail());
+        if (!entity.getPassword().equals(login.getPassword())){
+            StrcturedErrorException errorException = new StrcturedErrorException();
+            errorException.setError(new StructuredError("password","wrong password"));
+        }
+        return new TokenDTO(entity);
+    }
+
+    @Override
+    public UserDTO me() {
+        String mail = userHolder.getUser().getMail();
+        return new UserDTO(userService.get(mail));
+    }
 
     @Override
     public boolean auth(UUID uuid, String mail) {
-        UserEntity entity = userService.get(uuid,mail);
-        if (entity != null){
+        UserEntity entity = userService.get(mail);
+        if (entity.getUuid().equals(uuid)){
             entity.setStatus(UserStatus.ACTIVATED);
             userService.save(entity);
             return true;

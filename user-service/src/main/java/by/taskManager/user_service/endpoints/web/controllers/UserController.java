@@ -15,8 +15,10 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 private IUserService userService;
-    public UserController(IUserService userService) {
+private IFeignClientAudit feignClientAudit;
+    public UserController(IUserService userService,IFeignClientAudit feignClientAudit) {
         this.userService = userService;
+        this.feignClientAudit = feignClientAudit;
     }
 
     @RequestMapping(method = RequestMethod.POST)

@@ -1,7 +1,6 @@
 package by.taskManager.user_service.service;
 
 import by.taskManager.user_service.core.dto.*;
-import by.taskManager.user_service.core.exception.DaoException;
 import by.taskManager.user_service.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
@@ -10,8 +9,6 @@ import by.taskManager.user_service.dao.api.IUserData;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IUserService;
 import by.taskManager.user_service.service.validation.api.Validation;
-import jakarta.validation.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -89,7 +86,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity get(UUID uuid, String mail) {
-        return userData.findByUuidAndMail(uuid,mail);
+    public UserEntity get(String mail) {
+        return userData.findByMail(mail);
     }
 }

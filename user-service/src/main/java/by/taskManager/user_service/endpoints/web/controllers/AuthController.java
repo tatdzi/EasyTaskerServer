@@ -1,5 +1,8 @@
 package by.taskManager.user_service.endpoints.web.controllers;
 
+import by.taskManager.user_service.component.JwtTokenUtil;
+import by.taskManager.user_service.core.dto.LoginDTO;
+import by.taskManager.user_service.core.dto.TokenDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.core.dto.UserDTO;
 import by.taskManager.user_service.service.api.IAuthService;
@@ -13,9 +16,11 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class AuthController {
     private IAuthService authService;
+    private JwtTokenUtil jwtTokenUtil;
 
-    public AuthController(IAuthService authService) {
+    public AuthController(IAuthService authService,JwtTokenUtil jwtTokenUtil) {
         this.authService = authService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -35,13 +40,14 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody UserCreateDTO dto){
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<String> login(@RequestBody LoginDTO login){
+       TokenDTO token = authService.login(login);
+        return new ResponseEntity<>(jwtTokenUtil.generateAccessToken(token),HttpStatus.OK);
     }
 
     @RequestMapping(value = "/me",method = RequestMethod.GET)
-    public UserDTO me(){
-        return null;
+    public ResponseEntity<UserDTO> me(){
+        UserDTO userDTO = authService.me();
+        return new ResponseEntity<>(userDTO,HttpStatus.OK);
     }
 }
