@@ -8,8 +8,8 @@ import by.taskManager.user_service.core.dto.UserDTO;
 import java.util.UUID;
 
 public interface IAuthService {
-    void save(UserCreateDTO dto);
-    boolean auth(UUID uuid, String mail);
+    UUID save(UserCreateDTO dto);
+    UUID auth(UUID uuid, String mail);
     TokenDTO login(LoginDTO login);
     UserDTO me();
 }

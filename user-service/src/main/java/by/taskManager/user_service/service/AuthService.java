@@ -13,31 +13,19 @@ import java.util.UUID;
 @Service
 public class AuthService implements IAuthService {
     private IUserService userService;
-    private MailSenderService mailSender;
     private UserHolder userHolder;
 
 
-    public AuthService(IUserService userService, MailSenderService mailSender,UserHolder userHolder) {
+    public AuthService(IUserService userService,UserHolder userHolder) {
         this.userService = userService;
-        this.mailSender = mailSender;
         this.userHolder = userHolder;
     }
 
     @Override
-    public void save(UserCreateDTO dto) {
+    public UUID save(UserCreateDTO dto) {
         dto.setRole(UserRole.USER.toString());
         dto.setStatus(UserStatus.WAITING_ACTIVATION.toString());
-        if (!ObjectUtils.isEmpty(dto.getMail())){
-            UserEntity entity = new UserEntity(dto);
-            entity.setUuid(UUID.randomUUID());
-            String message = String.format(
-                    "Welcome to Task Messager. Please, visit next link: " +
-                            "http://localhost/users/verification?code=" +
-                            entity.getUuid()+"&mail="+entity.getMail()
-            );
-            mailSender.send(dto.getMail(),"Activation code",message);
-            userService.save(entity);
-        }
+        return userService.save(dto);
     }
     @Override
     public TokenDTO login(LoginDTO login){

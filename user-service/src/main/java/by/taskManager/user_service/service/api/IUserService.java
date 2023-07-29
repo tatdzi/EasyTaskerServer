@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IUserService {
-    void save(UserCreateDTO dto);
-    void save(UserEntity entity);
+    UUID save(UserCreateDTO dto);
+    UUID save(UserEntity entity);
     UserEntity get(UUID uuid);
     PageDTO getCard(Integer page, Integer size);
-    void upadte(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update);
+    UUID upadte(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update);
     UserEntity get(String mail);
 }

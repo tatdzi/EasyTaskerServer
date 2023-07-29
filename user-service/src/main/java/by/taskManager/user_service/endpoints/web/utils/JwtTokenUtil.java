@@ -1,8 +1,7 @@
-package by.taskManager.user_service.component;
+package by.taskManager.user_service.endpoints.web.utils;
 
 import by.taskManager.user_service.config.property.JWTProperty;
 import by.taskManager.user_service.core.dto.TokenDTO;
-import by.taskManager.user_service.core.dto.UserDTO;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 

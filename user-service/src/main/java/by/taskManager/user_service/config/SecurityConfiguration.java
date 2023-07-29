@@ -1,6 +1,6 @@
 package by.taskManager.user_service.config;
 
-import by.taskManager.user_service.service.filter.JwtFilter;
+import by.taskManager.user_service.endpoints.web.filter.JwtFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/users/registration").permitAll()
                 .requestMatchers("/users/verification").permitAll()
                 .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/users/me").hasRole("USER")
+                .requestMatchers("/users/me").permitAll()
                 .requestMatchers("/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );

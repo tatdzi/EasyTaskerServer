@@ -1,8 +1,8 @@
-package by.taskManager.user_service.service.filter;
+package by.taskManager.user_service.endpoints.web.filter;
 
-import by.taskManager.user_service.component.JwtTokenUtil;
+
 import by.taskManager.user_service.core.dto.TokenDTO;
-import by.taskManager.user_service.core.dto.UserDTO;
+import by.taskManager.user_service.endpoints.web.utils.JwtTokenUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

@@ -6,24 +6,15 @@ public class UserCreateDTO {
     private String role;
     private String status;
     private String password;
-    private String code;
 
-    public UserCreateDTO(String mail, String fio, String role, String status, String password,String code) {
+    public UserCreateDTO(String mail, String fio, String role, String status, String password) {
         this.mail = mail;
         this.fio = fio;
         this.role = role;
         this.status = status;
         this.password = password;
-        this.code = code;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public void setRole(String role) {
         this.role = role;

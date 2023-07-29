@@ -15,38 +15,38 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 private IUserService userService;
-private IFeignClientAudit feignClientAudit;
-    public UserController(IUserService userService,IFeignClientAudit feignClientAudit) {
+
+    public UserController(IUserService userService) {
         this.userService = userService;
-        this.feignClientAudit = feignClientAudit;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> doPost(@RequestBody UserCreateDTO dto){
+    @ResponseStatus(HttpStatus.CREATED)
+    public void doPost(@RequestBody UserCreateDTO dto){
         userService.save(dto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PageDTO> doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
+    @ResponseStatus(HttpStatus.OK)
+    public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                          @RequestParam(name = "size", defaultValue = "20") Integer size){
-        return new ResponseEntity<>(userService.getCard(page,size),HttpStatus.OK) ;
+        return userService.getCard(page,size) ;
     }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
-    public ResponseEntity<UserDTO> doGet(@PathVariable UUID uuid){
-        return new ResponseEntity<>(new UserDTO(userService.get(uuid)),HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO doGet(@PathVariable UUID uuid){
+        return new UserDTO(userService.get(uuid));
     }
 
 
 
     @RequestMapping(method = RequestMethod.PUT,value = "/{uuid}/dt_update/{dt_update}")
-    public ResponseEntity<?> doPut(@RequestBody UserCreateDTO dto,
+    @ResponseStatus(HttpStatus.OK)
+    public void doPut(@RequestBody UserCreateDTO dto,
                                    @PathVariable UUID uuid,
                                    @PathVariable LocalDateTime dt_update){
         userService.upadte(dto,uuid,dt_update);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

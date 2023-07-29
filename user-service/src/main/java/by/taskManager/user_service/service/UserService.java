@@ -12,6 +12,7 @@ import by.taskManager.user_service.service.validation.api.Validation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void save(UserCreateDTO dto){
+    public UUID save(UserCreateDTO dto){
         validation.validation(dto);
         UserEntity entity = new UserEntity(dto);
         entity.setUuid(UUID.randomUUID());
@@ -38,12 +39,19 @@ public class UserService implements IUserService {
             errorException.setError(new StructuredError("mail","Такой адрес электронной почты уже существует"));
             throw errorException;
         }
-        save(entity);
-    }
-
-    @Override
-    public void save(UserEntity entity){
+        if (entity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
+            if (!ObjectUtils.isEmpty(dto.getMail())){
+                String message = String.format(
+                        "Welcome to Task Messager. Please, visit next link: " +
+                                "http://localhost/users/verification?code=" +
+                                entity.getUuid()+"&mail="+entity.getMail()
+                );
+                mailSender.send(dto.getMail(),"Activation code",message);
+                userService.save(entity);
+            }
+        }
         userData.save(entity);
+        return entity.getUuid();
     }
 
 
