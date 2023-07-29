@@ -1,5 +1,7 @@
 package by.taskManager.user_service.core.dto;
 
+import by.taskManager.user_service.dao.entity.UserEntity;
+
 public class UserCreateDTO {
     private String mail;
     private String fio;
@@ -14,7 +16,13 @@ public class UserCreateDTO {
         this.status = status;
         this.password = password;
     }
-
+    public UserCreateDTO(UserEntity entity) {
+        this.mail = entity.getMail();
+        this.fio = entity.getFio();
+        this.role = entity.getRole().toString();
+        this.status = entity.getStatus().toString();
+        this.password = entity.getPassword();
+    }
 
     public void setRole(String role) {
         this.role = role;

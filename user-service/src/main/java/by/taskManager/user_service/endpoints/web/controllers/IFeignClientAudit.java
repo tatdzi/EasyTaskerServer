@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "audit-service",url = "http://audit-service:8080")
+@FeignClient(name = "${audit-service.name}",url = "${audit-service.url}")
 public interface IFeignClientAudit {
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     void saveItem(UserDTO dto);

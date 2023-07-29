@@ -1,0 +1,22 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    username: t15968370@gmail.com
+    password: kftsjtmdnbycbxnz
+    port: 465
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+          auth: true
+          starttles:
+            enable: true
+    protocol: smtps
+verification:
+  url: http://localhost/users/verification
+server:
+  port: 81

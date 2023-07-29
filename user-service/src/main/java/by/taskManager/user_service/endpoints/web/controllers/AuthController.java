@@ -27,11 +27,13 @@ public class AuthController {
     public void registration(@RequestBody UserCreateDTO dto){
             authService.save(dto);
     }
+
+
     @RequestMapping(value = "/verification",method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void verification(@RequestParam UUID uuid,
+    public void verification(@RequestParam UUID code,
                          @RequestParam String mail){
-        authService.auth(uuid,mail);
+        authService.auth(code,mail);
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)

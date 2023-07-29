@@ -44,13 +44,13 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public boolean auth(UUID uuid, String mail) {
+    public UUID auth(UUID uuid, String mail) {
         UserEntity entity = userService.get(mail);
-        if (entity.getUuid().equals(uuid)){
-            entity.setStatus(UserStatus.ACTIVATED);
-            userService.save(entity);
-            return true;
+        if (!entity.getUuid().equals(uuid)){
+          throw new RuntimeException("неверный код авторизции!");
         }
-       return false;
+        entity.setStatus(UserStatus.ACTIVATED);
+        userService.upadte(new UserCreateDTO(entity),uuid,entity.getDtUpdate());
+        return entity.getUuid();
     }
 }

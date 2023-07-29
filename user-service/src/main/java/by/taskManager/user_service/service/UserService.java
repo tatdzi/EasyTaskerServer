@@ -7,12 +7,12 @@ import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.core.error.StructuredError;
 import by.taskManager.user_service.dao.api.IUserData;
 import by.taskManager.user_service.dao.entity.UserEntity;
+import by.taskManager.user_service.endpoints.web.controllers.IFeignClientNatification;
 import by.taskManager.user_service.service.api.IUserService;
 import by.taskManager.user_service.service.validation.api.Validation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,10 +23,12 @@ import java.util.UUID;
 public class UserService implements IUserService {
     private IUserData userData;
     private Validation<UserCreateDTO> validation;
+    private IFeignClientNatification natification;
 
-    public UserService(IUserData userData, Validation<UserCreateDTO> validatio) {
+    public UserService(IUserData userData, Validation<UserCreateDTO> validatio,IFeignClientNatification natification) {
         this.userData = userData;
         this.validation = validatio;
+        this.natification =natification;
     }
 
     @Override
@@ -40,15 +42,8 @@ public class UserService implements IUserService {
             throw errorException;
         }
         if (entity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
-            if (!ObjectUtils.isEmpty(dto.getMail())){
-                String message = String.format(
-                        "Welcome to Task Messager. Please, visit next link: " +
-                                "http://localhost/users/verification?code=" +
-                                entity.getUuid()+"&mail="+entity.getMail()
-                );
-                mailSender.send(dto.getMail(),"Activation code",message);
-                userService.save(entity);
-            }
+            MailDetails mailDetails = new MailDetails(entity.getMail(),entity.getUuid());
+            natification.sendLetter(mailDetails);
         }
         userData.save(entity);
         return entity.getUuid();
@@ -73,7 +68,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void upadte( UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
+    public UUID upadte( UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         UserEntity entity = userData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");
@@ -90,7 +85,8 @@ public class UserService implements IUserService {
         entity.setFio(dto.getFio());
         entity.setMail(dto.getMail());
         entity.setPassword(dto.getPassword());
-        save(entity);
+        userData.save(entity);
+        return entity.getUuid();
     }
 
     @Override
