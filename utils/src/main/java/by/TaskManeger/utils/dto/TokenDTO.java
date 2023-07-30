@@ -1,21 +1,23 @@
 package by.TaskManeger.utils.dto;
 
 
+import java.util.UUID;
+
 public class TokenDTO {
-    private String uuid;
+    private UUID uuid;
     private String mail;
     private String fio;
     private UserRole role;
 
 
-    public TokenDTO(String uuid, String mail, String fio, UserRole role) {
+    public TokenDTO(UUID uuid, String mail, String fio, UserRole role) {
         this.uuid = uuid;
         this.mail = mail;
         this.fio = fio;
         this.role = role;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
