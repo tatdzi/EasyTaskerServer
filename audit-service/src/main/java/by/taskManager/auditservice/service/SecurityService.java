@@ -6,6 +6,7 @@ import by.TaskManeger.utils.dto.TokenDTO;
 import by.taskManager.auditservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.auditservice.dao.api.IAuditData;
 import by.taskManager.auditservice.dao.entity.AuditEntity;
+import by.taskManager.auditservice.service.api.ISecurityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class SecurityService {
+public class SecurityService implements ISecurityService {
     private IAuditData auditData;
 
     public SecurityService(IAuditData auditData) {
         this.auditData = auditData;
+    }
+
+    public void save(AuditDTO audit){
+        auditData.save(new AuditEntity(audit));
     }
 
     public PageDTO getPage(Integer page, Integer size){
