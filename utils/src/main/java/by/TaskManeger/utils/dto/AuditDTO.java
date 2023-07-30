@@ -6,15 +6,15 @@ import java.util.UUID;
 
 public class AuditDTO {
     private UUID uuid;
-    private LocalDateTime dt_create;
+    private LocalDateTime dtCreate;
     private TokenDTO user;
     private String text;
     private EssenceType type;
     private String id;
 
-    public AuditDTO(UUID uuid, LocalDateTime dt_create, TokenDTO user, String text, EssenceType type, String id) {
+    public AuditDTO(UUID uuid, LocalDateTime dtCreate, TokenDTO user, String text, EssenceType type, String id) {
         this.uuid = uuid;
-        this.dt_create = dt_create;
+        this.dtCreate = dtCreate;
         this.user = user;
         this.text = text;
         this.type = type;
@@ -27,8 +27,8 @@ public class AuditDTO {
         return uuid;
     }
 
-    public LocalDateTime getDt_create() {
-        return dt_create;
+    public LocalDateTime getDtCreate() {
+        return dtCreate;
     }
 
     public TokenDTO getUser() {
