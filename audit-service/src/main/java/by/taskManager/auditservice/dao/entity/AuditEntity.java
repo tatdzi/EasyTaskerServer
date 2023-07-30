@@ -4,13 +4,12 @@ package by.taskManager.auditservice.dao.entity;
 
 import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.EssenceType;
-import by.TaskManeger.utils.dto.TokenDTO;
 import by.TaskManeger.utils.dto.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.CreationTimestamp;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -22,7 +21,7 @@ public class AuditEntity {
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
     @Column(name = "user_uuid")
-    private String userUuid;
+    private UUID userUuid;
     @Column(name = "user_mail")
     private String userMail;
     @Column(name = "user_fio")
@@ -57,7 +56,7 @@ public class AuditEntity {
         return dtCreate;
     }
 
-    public String getUserUuid() {
+    public UUID getUserUuid() {
         return userUuid;
     }
 
