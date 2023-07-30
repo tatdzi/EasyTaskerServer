@@ -1,6 +1,6 @@
 package by.taskManager.notificationservice.service;
 
-import by.taskManager.notificationservice.core.dto.MailDetails;
+import by.TaskManeger.utils.dto.MailDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

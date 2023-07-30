@@ -1,7 +1,9 @@
 package by.taskManager.auditservice.dao.entity;
 
-import by.taskManager.auditservice.core.dto.EssenceType;
-import by.taskManager.auditservice.core.dto.UserDTO;
+
+
+import by.TaskManeger.utils.dto.EssenceType;
+import by.TaskManeger.utils.dto.TokenDTO;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,7 +11,7 @@ import java.util.UUID;
 public class AuditEntity {
     private UUID uuid;
     private LocalDateTime dt_create;
-    private UserDTO user;
+    private TokenDTO user;
     private String text;
     private EssenceType type;
     private String id;
@@ -17,7 +19,7 @@ public class AuditEntity {
     public AuditEntity() {
     }
 
-    public AuditEntity(UUID uuid, LocalDateTime dt_create, UserDTO user, String text, EssenceType type, String id) {
+    public AuditEntity(UUID uuid, LocalDateTime dt_create, TokenDTO user, String text, EssenceType type, String id) {
         this.uuid = uuid;
         this.dt_create = dt_create;
         this.user = user;
@@ -34,7 +36,7 @@ public class AuditEntity {
         return dt_create;
     }
 
-    public UserDTO getUser() {
+    public TokenDTO getUser() {
         return user;
     }
 
@@ -58,7 +60,7 @@ public class AuditEntity {
         this.dt_create = dt_create;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(TokenDTO user) {
         this.user = user;
     }
 

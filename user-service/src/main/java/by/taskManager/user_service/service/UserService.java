@@ -1,13 +1,21 @@
 package by.taskManager.user_service.service;
 
-import by.taskManager.user_service.core.dto.*;
+
+
+
+import by.TaskManeger.utils.dto.MailDetails;
+import by.TaskManeger.utils.dto.PageDTO;
+import by.TaskManeger.utils.dto.UserRole;
+import by.TaskManeger.utils.error.StructuredError;
+import by.taskManager.user_service.core.dto.UserCreateDTO;
+import by.taskManager.user_service.core.dto.UserDTO;
+import by.taskManager.user_service.core.dto.UserStatus;
 import by.taskManager.user_service.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
-import by.taskManager.user_service.core.error.StructuredError;
 import by.taskManager.user_service.dao.api.IUserData;
 import by.taskManager.user_service.dao.entity.UserEntity;
-import by.taskManager.user_service.endpoints.web.controllers.IFeignClientNatification;
+import by.taskManager.user_service.endpoints.service.controller.IFeignClientNatification;
 import by.taskManager.user_service.service.api.IUserService;
 import by.taskManager.user_service.service.validation.api.Validation;
 import org.springframework.data.domain.Page;
@@ -68,7 +76,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UUID upadte( UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
+    public UUID upadte(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         UserEntity entity = userData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");

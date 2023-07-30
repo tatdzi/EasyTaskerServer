@@ -1,8 +1,8 @@
 package by.taskManager.user_service.endpoints.web.filter;
 
 
-import by.taskManager.user_service.core.dto.TokenDTO;
-import by.taskManager.user_service.endpoints.web.utils.JwtTokenUtil;
+import by.TaskManeger.utils.dto.TokenDTO;
+import by.taskManager.user_service.endpoints.handler.JwtTokenHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,9 +24,9 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtTokenUtil jwtHandler;
+    private final JwtTokenHandler jwtHandler;
 
-    public JwtFilter(JwtTokenUtil jwtHandler) {
+    public JwtFilter(JwtTokenHandler jwtHandler) {
         this.jwtHandler = jwtHandler;
     }
 

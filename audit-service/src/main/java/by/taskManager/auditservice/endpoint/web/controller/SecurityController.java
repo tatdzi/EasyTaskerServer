@@ -1,7 +1,8 @@
 package by.taskManager.auditservice.endpoint.web.controller;
 
-import by.taskManager.auditservice.core.dto.AuditDTO;
-import by.taskManager.auditservice.core.dto.PageDTO;
+
+import by.TaskManeger.utils.dto.AuditDTO;
+import by.TaskManeger.utils.dto.PageDTO;
 import by.taskManager.auditservice.service.SecurityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,6 @@ public class SecurityController {
     }
     @RequestMapping(value = "/{uuid}",method = RequestMethod.GET)
     public ResponseEntity<AuditDTO> getCard(@PathVariable UUID uuid){
-        return new ResponseEntity<>(new AuditDTO(service.getCard(uuid)),HttpStatus.OK);
+        return new ResponseEntity<>(service.getCard(uuid),HttpStatus.OK);
     }
 }

@@ -1,6 +1,6 @@
 package by.taskManager.user_service.core.exception;
 
-import by.taskManager.user_service.core.error.StructuredError;
+import by.TaskManeger.utils.error.StructuredError;
 
 import java.util.ArrayList;
 import java.util.List;
