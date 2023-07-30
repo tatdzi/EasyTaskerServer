@@ -2,16 +2,34 @@ package by.taskManager.auditservice.dao.entity;
 
 
 
+import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.EssenceType;
 import by.TaskManeger.utils.dto.TokenDTO;
+import by.TaskManeger.utils.dto.UserRole;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+@Entity
+@Table(name = "audit")
 public class AuditEntity {
+    @Id
     private UUID uuid;
-    private LocalDateTime dt_create;
-    private TokenDTO user;
+    @Column(name = "dt_create")
+    private LocalDateTime dtCreate;
+    @Column(name = "user_uuid")
+    private String userUuid;
+    @Column(name = "user_mail")
+    private String userMail;
+    @Column(name = "user_fio")
+    private String userFio;
+    @Column(name = "user_role")
+    private UserRole userRole;
+
     private String text;
     private EssenceType type;
     private String id;
@@ -19,25 +37,40 @@ public class AuditEntity {
     public AuditEntity() {
     }
 
-    public AuditEntity(UUID uuid, LocalDateTime dt_create, TokenDTO user, String text, EssenceType type, String id) {
-        this.uuid = uuid;
-        this.dt_create = dt_create;
-        this.user = user;
-        this.text = text;
-        this.type = type;
-        this.id = id;
+    public AuditEntity(AuditDTO dto) {
+        this.uuid = dto.getUuid();
+        this.dtCreate = dto.getDtCreate();
+        this.userUuid = dto.getUser().getUuid();
+        this.userMail = dto.getUser().getMail();
+        this.userFio = dto.getUser().getFio();
+        this.userRole = dto.getUser().getRole();
+        this.text = dto.getText();
+        this.type = dto.getType();
+        this.id = dto.getId();
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public LocalDateTime getDt_create() {
-        return dt_create;
+    public LocalDateTime getDtCreate() {
+        return dtCreate;
     }
 
-    public TokenDTO getUser() {
-        return user;
+    public String getUserUuid() {
+        return userUuid;
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public String getUserFio() {
+        return userFio;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
     }
 
     public String getText() {
@@ -50,29 +83,5 @@ public class AuditEntity {
 
     public String getId() {
         return id;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public void setDt_create(LocalDateTime dt_create) {
-        this.dt_create = dt_create;
-    }
-
-    public void setUser(TokenDTO user) {
-        this.user = user;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setType(EssenceType type) {
-        this.type = type;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }
