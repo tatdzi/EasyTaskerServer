@@ -1,7 +1,7 @@
 package by.taskManager.user_service.dao.entity;
 
+import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.dto.UserRole;
 import by.taskManager.user_service.core.dto.UserStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

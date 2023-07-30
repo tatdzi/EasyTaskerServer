@@ -1,7 +1,7 @@
 package by.taskManager.user_service.service.validation;
 
+import by.TaskManeger.utils.error.StructuredError;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.error.StructuredError;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.service.validation.api.Validation;
 import org.springframework.stereotype.Component;

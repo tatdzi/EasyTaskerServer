@@ -1,6 +1,6 @@
 package by.taskManager.user_service.service.api;
 
-import by.taskManager.user_service.core.dto.PageDTO;
+import by.TaskManeger.utils.dto.PageDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.dao.entity.UserEntity;
 

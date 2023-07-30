@@ -1,7 +1,8 @@
 package by.taskManager.auditservice.service;
 
-import by.taskManager.auditservice.core.dto.AuditDTO;
-import by.taskManager.auditservice.core.dto.PageDTO;
+import by.TaskManeger.utils.dto.AuditDTO;
+import by.TaskManeger.utils.dto.PageDTO;
+import by.taskManager.auditservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.auditservice.dao.api.IAuditData;
 import by.taskManager.auditservice.dao.entity.AuditEntity;
 import org.springframework.data.domain.Page;
@@ -20,17 +21,29 @@ public class SecurityService {
         this.auditData = auditData;
     }
 
-    public PageDTO getPage(Integer page,Integer size){
+    public PageDTO getPage(Integer page, Integer size){
         Page<AuditEntity> pageResponse =auditData.findAll(PageRequest.of(page, size));
         List<AuditDTO> auditDTOS = new ArrayList<>();
-        for (AuditEntity entity:pageResponse.getContent()){
-            auditDTOS.add(new AuditDTO(entity));
+        for (AuditEntity audit:pageResponse.getContent()){
+            auditDTOS.add(new AuditDTO(audit.getUuid(),
+                    audit.getDt_create(),
+                    audit.getUser(),
+                    audit.getText(),
+                    audit.getType(),
+                    audit.getId()));
         }
         return new PageDTO<>(pageResponse,auditDTOS);
     }
-    public AuditEntity getCard(UUID uuid){
-        return auditData.findById(uuid).
+    public AuditDTO getCard(UUID uuid){
+        AuditEntity audit = auditData.findById(uuid).
                 orElseThrow(()-> new NotCorrectUUIDException("Пользователь с таким uuid не найден"));
+        AuditDTO dto = new AuditDTO(audit.getUuid(),
+                audit.getDt_create(),
+                audit.getUser(),
+                audit.getText(),
+                audit.getType(),
+                audit.getId());
+        return dto;
     }
 
 

@@ -1,7 +1,7 @@
 package by.taskManager.user_service.service.api;
 
+import by.TaskManeger.utils.dto.TokenDTO;
 import by.taskManager.user_service.core.dto.LoginDTO;
-import by.taskManager.user_service.core.dto.TokenDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.core.dto.UserDTO;
 

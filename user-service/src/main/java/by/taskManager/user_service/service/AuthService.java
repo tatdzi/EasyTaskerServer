@@ -1,13 +1,16 @@
 package by.taskManager.user_service.service;
 
+import by.TaskManeger.utils.dto.TokenDTO;
+import by.TaskManeger.utils.dto.UserRole;
+import by.TaskManeger.utils.error.StructuredError;
 import by.taskManager.user_service.core.dto.*;
-import by.taskManager.user_service.core.error.StructuredError;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IAuthService;
 import by.taskManager.user_service.service.api.IUserService;
+import by.taskManager.user_service.service.component.UserHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
+
 import java.util.UUID;
 
 @Service
@@ -34,7 +37,7 @@ public class AuthService implements IAuthService {
             StrcturedErrorException errorException = new StrcturedErrorException();
             errorException.setError(new StructuredError("password","wrong password"));
         }
-        return new TokenDTO(entity);
+        return new TokenDTO(entity.getMail(),entity.getRole().name());
     }
 
     @Override
