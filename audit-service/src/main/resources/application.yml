@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tmAudit?ApplicationName=tmAudit
+    url: jdbc:postgresql://localhost:5432/tm_audit?ApplicationName=tmAudit
     username: audit
     password: a7530305
     hikari:

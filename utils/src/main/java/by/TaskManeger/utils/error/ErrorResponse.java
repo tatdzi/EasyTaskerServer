@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorResponse {
-    private List<java.lang.Error> errors;
+    private List<Error> errors;
 
     public ErrorResponse() {
         this.errors = new ArrayList<>();
     }
 
-    public List<java.lang.Error> getErrors() {
+    public List<Error> getErrors() {
         return errors;
     }
 
-    public void setError(java.lang.Error error) {
+    public void setError(Error error) {
         errors.add(error);
     }
 }

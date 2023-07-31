@@ -22,7 +22,7 @@ public class AuditAspect {
         this.userHolder = userHolder;
     }
 
-    @AfterReturning(value = "execution(void by.taskManager.user_service.service.UserService.save(..))",
+    @AfterReturning(value = "execution(* by.taskManager.user_service.service.UserService.save(..))",
             returning = "reterning")
     public void afterSaveAdvice(UUID reterning){
         AuditDTO audit = new AuditDTO();
@@ -34,7 +34,7 @@ public class AuditAspect {
         audit.setId(reterning.toString());
         feignClientAudit.saveItem(audit);
     }
-    @AfterReturning(value = "execution(void by.taskManager.user_service.service.UserService.upadte(..))",
+    @AfterReturning(value = "execution(* by.taskManager.user_service.service.UserService.upadte(..))",
             returning = "reterning")
     public void afterUpdateAdvice(UUID reterning){
         AuditDTO audit = new AuditDTO();
@@ -46,7 +46,7 @@ public class AuditAspect {
         audit.setId(reterning.toString());
         feignClientAudit.saveItem(audit);
     }
-    @AfterReturning(value = "execution(void by.taskManager.user_service.service.AuthService.save(..))",
+    @AfterReturning(value = "execution(* by.taskManager.user_service.service.AuthService.save(..))",
             returning = "reterning")
     public void afterRegistrationAdvice(UUID reterning){
         AuditDTO audit = new AuditDTO();
@@ -58,7 +58,7 @@ public class AuditAspect {
         audit.setId(reterning.toString());
         feignClientAudit.saveItem(audit);
     }
-    @AfterReturning(value = "execution(void by.taskManager.user_service.service.AuthService.auth(..))",
+    @AfterReturning(value = "execution(* by.taskManager.user_service.service.AuthService.auth(..))",
             returning = "reterning")
     public void afterVerificationAdvice(UUID reterning){
         AuditDTO audit = new AuditDTO();
