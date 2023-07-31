@@ -37,7 +37,7 @@ public class AuthService implements IAuthService {
             StrcturedErrorException errorException = new StrcturedErrorException();
             errorException.setError(new StructuredError("password","wrong password"));
         }
-        return new TokenDTO(entity.getMail(),entity.getRole().name());
+        return new TokenDTO(entity.getUuid(),entity.getMail(),entity.getFio(),entity.getRole());
     }
 
     @Override

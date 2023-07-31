@@ -1,8 +1,8 @@
 package by.taskManager.auditservice.endpoint.hendler;
 
 
-import by.taskManager.auditservice.core.error.ErrorResponse;
-import by.taskManager.auditservice.core.error.StructuredErrorResponse;
+import by.TaskManeger.utils.error.ErrorResponse;
+import by.TaskManeger.utils.error.StructuredErrorResponse;
 import by.taskManager.auditservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.auditservice.core.exception.StrcturedErrorException;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,7 @@
 package by.taskManager.user_service.endpoints.handler;
 
 import by.TaskManeger.utils.dto.TokenDTO;
+import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.user_service.config.property.JWTProperty;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -21,6 +23,8 @@ public class JwtTokenHandler {
     public String generateAccessToken(TokenDTO token) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("mail", token.getMail());
+        payload.put("uuid", token.getUuid());
+        payload.put("fio", token.getFio());
         payload.put("role",token.getRole());
         return Jwts.builder()
                 .setSubject(token.getMail())
@@ -37,9 +41,12 @@ public class JwtTokenHandler {
                 .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
-
-        return new TokenDTO(claims.get("mail").toString(),claims.get("role").toString());
+        return new TokenDTO(UUID.fromString(claims.get("uuid").toString()),
+                claims.get("mail").toString(),
+                claims.get("fio").toString(),
+                UserRole.valueOf(claims.get("role").toString()));
     }
+
 
 
     public boolean validate(String token) {
