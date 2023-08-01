@@ -9,6 +9,9 @@ public class TokenDTO {
     private String fio;
     private UserRole role;
 
+    public TokenDTO() {
+    }
+
     public TokenDTO(UUID uuid, String mail, String fio, UserRole role) {
         this.uuid = uuid;
         this.mail = mail;
