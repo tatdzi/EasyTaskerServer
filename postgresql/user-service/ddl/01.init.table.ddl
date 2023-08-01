@@ -2,6 +2,7 @@ create schema if not exists app;
 alter schema app owner to postgres;
 grant usage on schema app to "user";
 
+
 create table if not exists app.users
 (
     uuid      uuid         not null,
