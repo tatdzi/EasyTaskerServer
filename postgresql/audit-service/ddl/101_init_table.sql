@@ -1,5 +1,6 @@
+\c tm_audit
 create schema if not exists app;
-alter schema app owner to postgres;
+alter schema app owner to root;
 grant usage on schema app to "audit";
 
 create table if not exists app.audit
@@ -17,5 +18,5 @@ create table if not exists app.audit
     primary key (uuid)
  );
 
-alter table app.audit owner to postgres;
+alter table app.audit owner to root;
 grant insert, select, update on app.audit to "audit";

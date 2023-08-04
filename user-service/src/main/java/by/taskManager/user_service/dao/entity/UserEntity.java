@@ -27,7 +27,11 @@ public class UserEntity {
     private String mail;
     private String password;
     private String fio;
+
+    @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
 

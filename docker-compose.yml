@@ -2,7 +2,7 @@ version: '3.5'
 services:
   db:
     build: postgresql
-    image: taskmanager_postgresql:1.0.0
+    image: taskmanager_postgresql:1.0.20
     restart: always
     environment:
       POSTGRES_USER: root
@@ -33,7 +33,16 @@ services:
     image: taskmanager_user-service:1.0.0
     networks:
       - taskmanager_ntwrk
-
+  audit-service:
+    build: audit-service
+    image: taskmanager_audit-service:1.0.0
+    networks:
+      - taskmanager_ntwrk
+  notification-service:
+    build: notification-service
+    image: taskmanager_notification-service:1.0.0
+    networks:
+      - taskmanager_ntwrk
   proxy:
     build: proxy
     image: taskmanager_proxy:1.0.0
