@@ -1,7 +1,7 @@
 FROM eclipse-temurin:19-jre-focal
 MAINTAINER ITAcademy
 
-ADD ./target/user_service.jar /app/
+ADD ./target/audit-service.jar /app/
 
 CMD ["java", "-Xmx200m", "-jar", "/app/user-service.jar"]
 

@@ -1,6 +1,7 @@
 package by.taskManager.user_service.endpoints.handler;
 
 
+import by.TaskManeger.utils.error.Error;
 import by.TaskManeger.utils.error.ErrorResponse;
 import by.TaskManeger.utils.error.StructuredErrorResponse;
 import by.taskManager.user_service.core.exception.DtUpdateNotCorrectException;
@@ -38,8 +39,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = {
-            IOException.class,
-            java.lang.Error.class,
+            IOException.class, java.lang.Error.class,
             RuntimeException.class,})
     public ResponseEntity<List<Error>> handler5(Exception e){
         ErrorResponse exception = new ErrorResponse();

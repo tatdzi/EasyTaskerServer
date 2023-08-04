@@ -25,10 +25,12 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public UUID save(UserCreateDTO dto) {
-        dto.setRole(UserRole.USER.toString());
-        dto.setStatus(UserStatus.WAITING_ACTIVATION.toString());
-        return userService.save(dto);
+    public UUID save(UserRegistrationDTO dto) {
+        UserCreateDTO user = new UserCreateDTO(dto.getMail(),dto.getFio(),
+        UserRole.USER.toString(),
+        UserStatus.WAITING_ACTIVATION.toString(),
+                dto.getPassword());
+        return userService.save(user);
     }
     @Override
     public TokenDTO login(LoginDTO login){
@@ -37,7 +39,7 @@ public class AuthService implements IAuthService {
             StrcturedErrorException errorException = new StrcturedErrorException();
             errorException.setError(new StructuredError("password","wrong password"));
         }
-        return new TokenDTO(entity.getMail(),entity.getRole().name());
+        return new TokenDTO(entity.getUuid(),entity.getMail(),entity.getFio(),entity.getRole());
     }
 
     @Override

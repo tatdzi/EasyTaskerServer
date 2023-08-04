@@ -2,7 +2,8 @@ package by.taskManager.auditservice.core.exception;
 
 
 
-import by.taskManager.auditservice.core.error.StructuredError;
+
+import by.TaskManeger.utils.error.StructuredError;
 
 import java.util.ArrayList;
 import java.util.List;

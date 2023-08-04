@@ -2,8 +2,8 @@ package by.taskManager.user_service.endpoints.web.controller;
 
 import by.TaskManeger.utils.dto.TokenDTO;
 import by.taskManager.user_service.core.dto.LoginDTO;
-import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.core.dto.UserDTO;
+import by.taskManager.user_service.core.dto.UserRegistrationDTO;
 import by.taskManager.user_service.endpoints.handler.JwtTokenHandler;
 import by.taskManager.user_service.service.api.IAuthService;
 import org.springframework.http.HttpStatus;
@@ -24,10 +24,9 @@ public class AuthController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void registration(@RequestBody UserCreateDTO dto){
+    public void registration(@RequestBody UserRegistrationDTO dto){
             authService.save(dto);
     }
-
 
     @RequestMapping(value = "/verification",method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
