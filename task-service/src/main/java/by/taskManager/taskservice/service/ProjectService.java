@@ -11,6 +11,7 @@ import by.taskManager.taskservice.dao.api.IProjectData;
 import by.taskManager.taskservice.service.api.IProjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Service
 public class ProjectService implements IProjectService {
     private IProjectData projectData;
+    private String ACTIVE = "ACTIVE";
 
     public ProjectService(IProjectData projectData) {
         this.projectData = projectData;
@@ -35,13 +37,23 @@ public class ProjectService implements IProjectService {
     }
     @Transactional(readOnly = true)
     @Override
-    public PageDTO getPage(Integer page, Integer size) {
-        Page<ProjectEntity> pageResponse = projectData.findAll(PageRequest.of(page, size));
+    public PageDTO getPage(Integer page, Integer size,Boolean archived) {
+        if (archived){
+            Page<ProjectEntity> pageResponse = projectData.findAll(PageRequest.of(page, size));
+            List<ProjectDTO> content = new ArrayList<>();
+            for (ProjectEntity entity:pageResponse){
+                content.add(new ProjectDTO(entity));
+            }
+            return new PageDTO<>(pageResponse,content);
+        }
+        Page<ProjectEntity> pageResponse = projectData.findByStatusIs(PageRequest.of(page, size),ACTIVE);
         List<ProjectDTO> content = new ArrayList<>();
         for (ProjectEntity entity:pageResponse){
             content.add(new ProjectDTO(entity));
         }
         return new PageDTO<>(pageResponse,content);
+
+
     }
     @Transactional(readOnly = true)
     @Override

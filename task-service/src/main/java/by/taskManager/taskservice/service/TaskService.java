@@ -1,6 +1,7 @@
 package by.taskManager.taskservice.service;
 
 import by.TaskManeger.utils.dto.PageDTO;
+import by.taskManager.taskservice.core.dto.FilterDTO;
 import by.taskManager.taskservice.core.dto.TaskCreateDTO;
 import by.taskManager.taskservice.core.dto.TaskDTO;
 import by.taskManager.taskservice.core.dto.TaskStatus;
@@ -18,6 +19,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static by.taskManager.taskservice.dao.specification.TaskSpecs.*;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 @Service
 public class TaskService implements ITaskService {
     private ITaskData taskData;
@@ -35,8 +40,14 @@ public class TaskService implements ITaskService {
     }
     @Transactional(readOnly = true)
     @Override
-    public PageDTO getPage(Integer page, Integer size) {
-        Page<TaskEntity> pageResponse = taskData.findAll(PageRequest.of(page, size));
+    public PageDTO getPage(Integer page, Integer size, FilterDTO filter) {
+        //todo нужна проверка на доступ пользователя к проектам находящимя фильтре
+        Page<TaskEntity> pageResponse = taskData.findAll(
+                where(equalsProject(filter.getProjects()))
+                .and(equalsImplementer(filter.getImplementers())
+                        .and(equalsStatus(filter.getStatus()))),
+                PageRequest.of(page, size)
+        );
         List<TaskDTO> content = new ArrayList<>();
         for (TaskEntity entity:pageResponse){
             content.add(new TaskDTO(entity));

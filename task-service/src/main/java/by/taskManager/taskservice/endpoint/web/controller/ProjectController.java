@@ -28,8 +28,9 @@ public class ProjectController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                         @RequestParam(name = "size", defaultValue = "20") Integer size){
-        return projectService.getPage(page,size) ;
+                         @RequestParam(name = "size", defaultValue = "20") Integer size,
+                         @RequestParam(name = "archived", defaultValue = "false") Boolean archived){
+        return projectService.getPage(page,size,archived) ;
     }
 
 

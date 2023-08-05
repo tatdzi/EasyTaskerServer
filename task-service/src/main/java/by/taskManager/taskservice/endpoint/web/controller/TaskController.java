@@ -1,14 +1,14 @@
 package by.taskManager.taskservice.endpoint.web.controller;
 
 import by.TaskManeger.utils.dto.PageDTO;
-import by.taskManager.taskservice.core.dto.TaskCreateDTO;
-import by.taskManager.taskservice.core.dto.TaskDTO;
-import by.taskManager.taskservice.core.dto.TaskStatus;
+import by.taskManager.taskservice.core.dto.*;
 import by.taskManager.taskservice.service.api.ITaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.annotation.RequestScope;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,8 +29,13 @@ public class TaskController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                         @RequestParam(name = "size", defaultValue = "20") Integer size){
-        return taskService.getPage(page,size) ;
+                         @RequestParam(name = "size", defaultValue = "20") Integer size,
+                         @RequestParam(name = "project",required = false) List<ProjectRef> projects,
+                         @RequestParam(name = "implementer",required = false)List<UserRef> implemeters,
+                         @RequestParam(name = "status",required = false)List<TaskStatus> statuses){
+        //todo нужен конвертер для фильтра
+        FilterDTO filter = new FilterDTO(projects,implemeters,statuses);
+        return taskService.getPage(page,size,filter) ;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
