@@ -26,7 +26,7 @@ public class TaskEntity {
     private String title;
 
     private String discription;
-
+    @Enumerated(EnumType.STRING)
     private TaskStatus status;
     private UserRef implementer;
 

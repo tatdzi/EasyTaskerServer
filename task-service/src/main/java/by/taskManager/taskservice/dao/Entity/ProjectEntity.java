@@ -1,6 +1,7 @@
 package by.taskManager.taskservice.dao.Entity;
 
 import by.TaskManeger.utils.dto.TokenDTO;
+import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.ProjectStatus;
 import by.taskManager.taskservice.core.dto.UserRef;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class ProjectEntity {
 
     private UserRef manager;
     private List<UserRef> staff;
+    @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
     public ProjectEntity() {
@@ -42,6 +44,14 @@ public class ProjectEntity {
         this.staff = staff;
         this.status = status;
     }
+    public ProjectEntity(ProjectCreateDTO dto) {
+        this.name = dto.getName();
+        this.discription = dto.getDiscription();
+        this.manager = dto.getManager();
+        this.staff = dto.getStaff();
+        this.status = ProjectStatus.valueOf(dto.getStatus());
+    }
+
 
     public UUID getUuid() {
         return uuid;
