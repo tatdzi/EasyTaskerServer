@@ -15,12 +15,13 @@ import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.dao.api.IUserData;
 import by.taskManager.user_service.dao.entity.UserEntity;
-import by.taskManager.user_service.endpoints.service.controller.IFeignClientNatification;
+import by.taskManager.user_service.service.api.INatificationService;
 import by.taskManager.user_service.service.api.IUserService;
 import by.taskManager.user_service.service.validation.api.Validation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,15 +32,16 @@ import java.util.UUID;
 public class UserService implements IUserService {
     private IUserData userData;
     private Validation<UserCreateDTO> validation;
-    private IFeignClientNatification natification;
+    private INatificationService mailService;
 
-    public UserService(IUserData userData, Validation<UserCreateDTO> validatio,IFeignClientNatification natification) {
+    public UserService(IUserData userData, Validation<UserCreateDTO> validatio, INatificationService mailService) {
         this.userData = userData;
         this.validation = validatio;
-        this.natification =natification;
+        this.mailService =mailService;
     }
 
     @Override
+    @Transactional
     public UUID save(UserCreateDTO dto){
         validation.validation(dto);
         UserEntity entity = new UserEntity(dto);
@@ -49,26 +51,27 @@ public class UserService implements IUserService {
             errorException.setError(new StructuredError("mail","Такой адрес электронной почты уже существует"));
             throw errorException;
         }
+        userData.save(entity);
         if (entity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
             MailDetails mailDetails = new MailDetails(entity.getMail(),entity.getUuid());
-            natification.sendLetter(mailDetails);
+            mailService.sendLetter(mailDetails);
         }
-        userData.save(entity);
         return entity.getUuid();
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public UserEntity get(UUID uuid) {
         return userData.findById(uuid).orElseThrow(() ->
                 new NotCorrectUUIDException("Пользователь с таким uuid не найден"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageDTO getCard(Integer page, Integer size) {
         Page<UserEntity> pageResponse = userData.findAll(PageRequest.of(page, size));
         List<UserDTO> content = new ArrayList<>();
-
         for (UserEntity entity:pageResponse){
             content.add(new UserDTO(entity));
         }
@@ -76,6 +79,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UUID upadte(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         UserEntity entity = userData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
@@ -98,6 +102,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserEntity get(String mail) {
         return userData.findByMail(mail);
     }
