@@ -2,7 +2,7 @@ package by.taskManager.user_service.aop.aspect;
 
 import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.EssenceType;
-import by.taskManager.user_service.endpoints.service.controller.IFeignClientAudit;
+import by.taskManager.user_service.service.api.IAuditService;
 import by.taskManager.user_service.service.component.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,11 +14,12 @@ import java.util.UUID;
 @Aspect
 @Component
 public class AuditAspect {
-    private IFeignClientAudit feignClientAudit;
+    private IAuditService auditService;
+
     private UserHolder userHolder;
 
-    public AuditAspect(IFeignClientAudit feignClientAudit,UserHolder userHolder) {
-        this.feignClientAudit = feignClientAudit;
+    public AuditAspect(IAuditService auditService,UserHolder userHolder) {
+        this.auditService = auditService;
         this.userHolder = userHolder;
     }
 
@@ -32,7 +33,7 @@ public class AuditAspect {
         audit.setText("created new user");
         audit.setType(EssenceType.USER);
         audit.setId(reterning.toString());
-        feignClientAudit.saveItem(audit);
+        auditService.saveItem(audit);
     }
     @AfterReturning(value = "execution(* by.taskManager.user_service.service.UserService.upadte(..))",
             returning = "reterning")
@@ -44,7 +45,7 @@ public class AuditAspect {
         audit.setText("updated new user");
         audit.setType(EssenceType.USER);
         audit.setId(reterning.toString());
-        feignClientAudit.saveItem(audit);
+        auditService.saveItem(audit);
     }
     @AfterReturning(value = "execution(* by.taskManager.user_service.service.AuthService.save(..))",
             returning = "reterning")
@@ -56,7 +57,7 @@ public class AuditAspect {
         audit.setText("registrated new user");
         audit.setType(EssenceType.USER);
         audit.setId(reterning.toString());
-        feignClientAudit.saveItem(audit);
+        auditService.saveItem(audit);
     }
     @AfterReturning(value = "execution(* by.taskManager.user_service.service.AuthService.auth(..))",
             returning = "reterning")
@@ -68,7 +69,7 @@ public class AuditAspect {
         audit.setText("user was verificate");
         audit.setType(EssenceType.USER);
         audit.setId(reterning.toString());
-        feignClientAudit.saveItem(audit);
+        auditService.saveItem(audit);
     }
 }
 
