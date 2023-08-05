@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("project")
+@RequestMapping("/project")
 public class ProjectController {
     private IProjectService projectService;
 

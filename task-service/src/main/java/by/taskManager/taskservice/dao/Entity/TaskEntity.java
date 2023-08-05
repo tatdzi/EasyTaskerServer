@@ -1,6 +1,7 @@
 package by.taskManager.taskservice.dao.Entity;
 
 import by.taskManager.taskservice.core.dto.ProjectRef;
+import by.taskManager.taskservice.core.dto.TaskCreateDTO;
 import by.taskManager.taskservice.core.dto.TaskStatus;
 import by.taskManager.taskservice.core.dto.UserRef;
 import jakarta.persistence.*;
@@ -33,13 +34,25 @@ public class TaskEntity {
     public TaskEntity() {
     }
 
-    public TaskEntity(UUID uuid, ProjectRef project, String title, String discription, TaskStatus status, UserRef implementer) {
+    public TaskEntity(UUID uuid,
+                      ProjectRef project,
+                      String title,
+                      String discription,
+                      TaskStatus status,
+                      UserRef implementer) {
         this.uuid = uuid;
         this.project = project;
         this.title = title;
         this.discription = discription;
         this.status = status;
         this.implementer = implementer;
+    }
+    public TaskEntity(TaskCreateDTO dto) {
+        this.project = dto.getProject();
+        this.title = dto.getTitle();
+        this.discription = dto.getDiscription();
+        this.status = TaskStatus.valueOf(dto.getStatus());
+        this.implementer = dto.getImplementer();
     }
 
     public UUID getUuid() {

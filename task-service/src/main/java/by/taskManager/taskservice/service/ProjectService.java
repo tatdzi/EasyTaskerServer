@@ -3,6 +3,7 @@ package by.taskManager.taskservice.service;
 import by.TaskManeger.utils.dto.PageDTO;
 import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.ProjectDTO;
+import by.taskManager.taskservice.core.dto.ProjectStatus;
 import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.taskservice.dao.Entity.ProjectEntity;
@@ -59,6 +60,7 @@ public class ProjectService implements IProjectService {
         entity.setDiscription(dto.getDiscription());
         entity.setManager(dto.getManager());
         entity.setStaff(dto.getStaff());
+        entity.setStatus(ProjectStatus.valueOf(dto.getStatus()));
         projectData.save(entity);
         return entity.getUuid();
     }
