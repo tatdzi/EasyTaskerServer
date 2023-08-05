@@ -6,12 +6,11 @@ import by.taskManager.taskservice.core.dto.ProjectDTO;
 import by.taskManager.taskservice.core.dto.ProjectStatus;
 import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
-import by.taskManager.taskservice.dao.Entity.ProjectEntity;
+import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import by.taskManager.taskservice.dao.api.IProjectData;
 import by.taskManager.taskservice.service.api.IProjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

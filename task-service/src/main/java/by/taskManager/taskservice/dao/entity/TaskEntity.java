@@ -1,4 +1,4 @@
-package by.taskManager.taskservice.dao.Entity;
+package by.taskManager.taskservice.dao.entity;
 
 import by.taskManager.taskservice.core.dto.ProjectRef;
 import by.taskManager.taskservice.core.dto.TaskCreateDTO;

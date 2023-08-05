@@ -2,11 +2,9 @@ package by.taskManager.taskservice.service.api;
 
 import by.TaskManeger.utils.dto.PageDTO;
 import by.taskManager.taskservice.core.dto.FilterDTO;
-import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.TaskCreateDTO;
 import by.taskManager.taskservice.core.dto.TaskStatus;
-import by.taskManager.taskservice.dao.Entity.ProjectEntity;
-import by.taskManager.taskservice.dao.Entity.TaskEntity;
+import by.taskManager.taskservice.dao.entity.TaskEntity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

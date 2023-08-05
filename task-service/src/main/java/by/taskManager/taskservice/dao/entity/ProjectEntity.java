@@ -1,6 +1,5 @@
-package by.taskManager.taskservice.dao.Entity;
+package by.taskManager.taskservice.dao.entity;
 
-import by.TaskManeger.utils.dto.TokenDTO;
 import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.ProjectStatus;
 import by.taskManager.taskservice.core.dto.UserRef;

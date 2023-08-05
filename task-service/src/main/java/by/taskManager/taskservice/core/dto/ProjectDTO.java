@@ -1,7 +1,7 @@
 package by.taskManager.taskservice.core.dto;
 
 import by.taskManager.taskservice.core.serializator.LocalDateTimeSerializer;
-import by.taskManager.taskservice.dao.Entity.ProjectEntity;
+import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDateTime;

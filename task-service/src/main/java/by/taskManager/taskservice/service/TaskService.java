@@ -7,7 +7,7 @@ import by.taskManager.taskservice.core.dto.TaskDTO;
 import by.taskManager.taskservice.core.dto.TaskStatus;
 import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
-import by.taskManager.taskservice.dao.Entity.TaskEntity;
+import by.taskManager.taskservice.dao.entity.TaskEntity;
 import by.taskManager.taskservice.dao.api.ITaskData;
 import by.taskManager.taskservice.service.api.ITaskService;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package by.taskManager.taskservice.dao.api;
 
-import by.taskManager.taskservice.dao.Entity.ProjectEntity;
+import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
