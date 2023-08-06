@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true, securedEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean

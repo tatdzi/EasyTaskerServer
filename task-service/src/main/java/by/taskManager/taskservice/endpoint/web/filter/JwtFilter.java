@@ -1,7 +1,10 @@
 package by.taskManager.taskservice.endpoint.web.filter;
 
 import by.TaskManeger.utils.dto.TokenDTO;
+import by.TaskManeger.utils.dto.UserDTO;
+import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.taskservice.endpoint.handler.JwtTokenHandler;
+import by.taskManager.taskservice.service.api.IUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
@@ -24,9 +28,11 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenHandler jwtHandler;
+    private IUserService userService;
 
-    public JwtFilter(JwtTokenHandler jwtHandler) {
+    public JwtFilter(JwtTokenHandler jwtHandler,IUserService userService) {
         this.jwtHandler = jwtHandler;
+        this.userService = userService;
     }
 
     @Override
@@ -47,7 +53,13 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        TokenDTO tokenDTO = jwtHandler.getUserToken(token);
+        UserDTO user = userService.getInfo(header);
+        TokenDTO tokenDTO = new TokenDTO(
+                UUID.fromString(user.getUuid()),
+                user.getMail(),
+                user.getFio(),
+                UserRole.valueOf(user.getRole())
+        );
 
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_" + tokenDTO.getRole()));

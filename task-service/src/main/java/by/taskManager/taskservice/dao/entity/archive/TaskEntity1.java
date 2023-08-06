@@ -1,16 +1,19 @@
-package by.taskManager.taskservice.dao.entity;
+package by.taskManager.taskservice.dao.entity.archive;
 
 import by.taskManager.taskservice.core.dto.TaskStatus;
+import by.taskManager.taskservice.dao.entity.ProjectEntity;
+import by.taskManager.taskservice.dao.entity.UserEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-@Entity
-@Table(name = "task")
-public class TaskEntity {
-    @Id
+
+
+//@Table(name = "task")
+public class TaskEntity1 {
+    //@Id
     private UUID uuid;
     @CreationTimestamp
     @Column(name = "dt_create")
@@ -21,25 +24,27 @@ public class TaskEntity {
     @Column(name = "dt_update")
     private LocalDateTime dtUpdate;
 
-    private UUID project;
+    @ManyToOne
+    @JoinColumn(name = "project_uuid")
+    private by.taskManager.taskservice.dao.entity.ProjectEntity project;
     private String title;
 
     private String discription;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     @ManyToOne
-    @JoinColumn(name = "implementer",referencedColumnName = "uuid")
+    @JoinColumn(name = "user_uuid")
     private UserEntity implementer;
 
-    public TaskEntity() {
+    public TaskEntity1() {
     }
 
-    public TaskEntity(UUID uuid,
-                      UUID project,
-                      String title,
-                      String discription,
-                      TaskStatus status,
-                      UserEntity implementer) {
+    public TaskEntity1(UUID uuid,
+                       by.taskManager.taskservice.dao.entity.ProjectEntity project,
+                       String title,
+                       String discription,
+                       TaskStatus status,
+                       UserEntity implementer) {
         this.uuid = uuid;
         this.project = project;
         this.title = title;
@@ -72,11 +77,11 @@ public class TaskEntity {
         this.dtUpdate = dtUpdate;
     }
 
-    public UUID getProject() {
+    public by.taskManager.taskservice.dao.entity.ProjectEntity getProject() {
         return project;
     }
 
-    public void setProject(UUID project) {
+    public void setProject(ProjectEntity project) {
         this.project = project;
     }
 

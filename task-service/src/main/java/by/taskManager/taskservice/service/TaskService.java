@@ -7,8 +7,11 @@ import by.taskManager.taskservice.core.dto.TaskDTO;
 import by.taskManager.taskservice.core.dto.TaskStatus;
 import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
+import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import by.taskManager.taskservice.dao.entity.TaskEntity;
 import by.taskManager.taskservice.dao.api.ITaskData;
+import by.taskManager.taskservice.dao.entity.UserEntity;
+import by.taskManager.taskservice.service.api.IProjectService;
 import by.taskManager.taskservice.service.api.ITaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,14 +29,21 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @Service
 public class TaskService implements ITaskService {
     private ITaskData taskData;
+    private IProjectService projectService;
 
-    public TaskService(ITaskData taskData) {
+    public TaskService(ITaskData taskData,IProjectService projectService) {
         this.taskData = taskData;
+        this.projectService = projectService;
     }
     @Transactional
     @Override
     public UUID save(TaskCreateDTO dto) {
-       TaskEntity entity = new TaskEntity(dto);
+       TaskEntity entity = new TaskEntity();
+       entity.setDiscription(dto.getDiscription());
+       entity.setStatus(TaskStatus.valueOf(dto.getStatus()));
+       entity.setProject(dto.getProject().getUuid());
+       entity.setTitle(dto.getTitle());
+       entity.setImplementer(new UserEntity(dto.getImplementer().getUuid()));
         entity.setUuid(UUID.randomUUID());
         taskData.save(entity);
         return entity.getUuid();
@@ -67,7 +77,8 @@ public class TaskService implements ITaskService {
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");
         }
-        entity.setProject(dto.getProject());
+        ProjectEntity projectEntity = projectService.get(dto.getProject().getUuid());
+        entity.setProject(projectEntity.getUuid());
         entity.setTitle(dto.getTitle());
         entity.setDiscription(dto.getDiscription());
         entity.setStatus(TaskStatus.valueOf(dto.getStatus()));

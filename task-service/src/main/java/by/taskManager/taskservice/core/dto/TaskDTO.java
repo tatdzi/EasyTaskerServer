@@ -43,11 +43,11 @@ public class TaskDTO {
         this.uuid = entity.getUuid().toString();
         this.dt_create = entity.getDtCreate();
         this.dt_update = entity.getDtUpdate();
-        this.project = entity.getProject();
+        this.project = new ProjectRef(entity.getProject());
         this.title = entity.getTitle();
         this.discription = entity.getDiscription();
         this.status = entity.getStatus().toString();
-        this.implementer = entity.getImplementer();
+        this.implementer = new UserRef(entity.getImplementer().getUuid());
     }
 
     public String getUuid() {

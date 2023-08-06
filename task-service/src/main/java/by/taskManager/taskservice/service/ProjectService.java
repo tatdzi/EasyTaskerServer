@@ -4,10 +4,12 @@ import by.TaskManeger.utils.dto.PageDTO;
 import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.ProjectDTO;
 import by.taskManager.taskservice.core.dto.ProjectStatus;
+import by.taskManager.taskservice.core.dto.UserRef;
 import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import by.taskManager.taskservice.dao.api.IProjectData;
+import by.taskManager.taskservice.dao.entity.UserEntity;
 import by.taskManager.taskservice.service.api.IProjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +28,7 @@ public class ProjectService implements IProjectService {
     public ProjectService(IProjectData projectData) {
         this.projectData = projectData;
     }
-    @Transactional
+
     @Override
     public UUID save(ProjectCreateDTO dto) {
         ProjectEntity entity = new ProjectEntity(dto);
@@ -69,8 +71,12 @@ public class ProjectService implements IProjectService {
         }
         entity.setName(dto.getName());
         entity.setDiscription(dto.getDiscription());
-        entity.setManager(dto.getManager());
-        entity.setStaff(dto.getStaff());
+        entity.setManager(new UserEntity(dto.getManager().getUuid()));
+        List<UserEntity> list = new ArrayList<>();
+        for (UserRef userRef:dto.getStaff()){
+            list.add(new UserEntity(userRef.getUuid()));
+        }
+        entity.setStaff(list);
         entity.setStatus(ProjectStatus.valueOf(dto.getStatus()));
         projectData.save(entity);
         return entity.getUuid();

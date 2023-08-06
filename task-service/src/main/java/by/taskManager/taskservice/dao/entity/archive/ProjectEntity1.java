@@ -1,8 +1,9 @@
-package by.taskManager.taskservice.dao.entity;
+package by.taskManager.taskservice.dao.entity.archive;
 
 import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.ProjectStatus;
 import by.taskManager.taskservice.core.dto.UserRef;
+import by.taskManager.taskservice.dao.entity.UserEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,10 +12,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-@Entity
-@Table(name = "project")
-public class ProjectEntity {
-    @Id
+
+
+//@Table(name = "project")
+public class ProjectEntity1 {
+    //@Id
+    @Column(name = "project_uuid")
     private UUID uuid;
     @CreationTimestamp
     @Column(name = "dt_create")
@@ -28,20 +31,20 @@ public class ProjectEntity {
     private String name;
     private String discription;
     @ManyToOne
-    @JoinColumn(name = "manager",referencedColumnName = "uuid")
+    @JoinColumn(name = "user_uuid")
     private UserEntity manager;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "project_staff",
-            joinColumns = @JoinColumn(name = "project_uuid",referencedColumnName="uuid"),
-            inverseJoinColumns = @JoinColumn(name = "user_uuid",referencedColumnName="uuid"))
+            joinColumns = @JoinColumn(name = "project_uuids",referencedColumnName="project_uuid"),
+            inverseJoinColumns = @JoinColumn(name = "user_uuids",referencedColumnName="user_uuid"))
     private List<UserEntity> staff;
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
-    public ProjectEntity() {
+    public ProjectEntity1() {
     }
 
-    public ProjectEntity(UUID uuid, String name, String discription, UserEntity manager, List<UserEntity> staff, ProjectStatus status) {
+    public ProjectEntity1(UUID uuid, String name, String discription, UserEntity manager, List<UserEntity> staff, ProjectStatus status) {
         this.uuid = uuid;
         this.name = name;
         this.discription = discription;
@@ -49,7 +52,7 @@ public class ProjectEntity {
         this.staff = staff;
         this.status = status;
     }
-    public ProjectEntity(ProjectCreateDTO dto) {
+    public ProjectEntity1(ProjectCreateDTO dto) {
         this.name = dto.getName();
         this.discription = dto.getDiscription();
         this.manager = new UserEntity(dto.getManager().getUuid());
