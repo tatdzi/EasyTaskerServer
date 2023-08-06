@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,39 +20,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter filter) throws Exception  {
-        // Enable CORS and disable CSRF
-        http = http.cors().and().csrf().disable();
-
-        // Set session management to stateless
-        http = http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
-
-        // Set unauthorized requests exception handler
-        http = http
-                .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling((exceptionHandling)-> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(
-                                    HttpServletResponse.SC_UNAUTHORIZED
+                                    HttpServletResponse.SC_UNAUTHORIZED);
+                                }
+                        ).accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(
+                                    HttpServletResponse.SC_FORBIDDEN
                             );
-                        }
-                )
-                .accessDeniedHandler((request, response, ex) -> {
-                    response.setStatus(
-                            HttpServletResponse.SC_FORBIDDEN
-                    );
-                })
-                .and();
-
-
-        // Add JWT token filter
-        http.addFilterBefore(
-                filter,
-                UsernamePasswordAuthenticationFilter.class
-        );
-
+                        })
+                ).addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

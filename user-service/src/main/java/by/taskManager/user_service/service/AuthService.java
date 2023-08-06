@@ -26,10 +26,13 @@ public class AuthService implements IAuthService {
 
     @Override
     public UUID save(UserRegistrationDTO dto) {
-        UserCreateDTO user = new UserCreateDTO(dto.getMail(),dto.getFio(),
-        UserRole.USER.toString(),
-        UserStatus.WAITING_ACTIVATION.toString(),
-                dto.getPassword());
+        UserCreateDTO user = new UserCreateDTO(
+                dto.getMail(),
+                dto.getFio(),
+                UserRole.USER.toString(),
+                UserStatus.WAITING_ACTIVATION.toString(),
+                dto.getPassword()
+        );
         return userService.save(user);
     }
     @Override

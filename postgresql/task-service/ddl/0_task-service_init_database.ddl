@@ -1,5 +1,5 @@
-create database tm_user;
-create role "user" with
+create database tm_task;
+create role "task" with
     LOGIN
     NOSUPERUSER
     NOCREATEDB
@@ -7,4 +7,4 @@ create role "user" with
     INHERIT
     NOREPLICATION
     CONNECTION LIMIT 5
-    PASSWORD 'uroot';
+    PASSWORD 'taskmanager';
