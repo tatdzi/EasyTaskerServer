@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(jsr250Enabled = true, securedEnabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                                     HttpServletResponse.SC_FORBIDDEN
                             );
                         })
+
                 ).addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

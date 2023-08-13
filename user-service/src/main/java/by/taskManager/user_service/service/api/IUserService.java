@@ -11,6 +11,6 @@ public interface IUserService {
     UUID save(UserCreateDTO dto);
     UserEntity get(UUID uuid);
     PageDTO getCard(Integer page, Integer size);
-    UUID upadte(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update);
+    UUID update(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update);
     UserEntity get(String mail);
 }

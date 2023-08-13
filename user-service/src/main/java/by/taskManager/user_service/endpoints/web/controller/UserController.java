@@ -48,6 +48,6 @@ private IUserService userService;
     public void doPut(@RequestBody UserCreateDTO dto,
                                    @PathVariable UUID uuid,
                                    @PathVariable LocalDateTime dt_update){
-        userService.upadte(dto,uuid,dt_update);
+        userService.update(dto,uuid,dt_update);
     }
 }
