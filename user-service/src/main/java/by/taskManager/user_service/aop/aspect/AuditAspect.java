@@ -2,6 +2,8 @@ package by.taskManager.user_service.aop.aspect;
 
 import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.EssenceType;
+import by.TaskManeger.utils.dto.TokenDTO;
+import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.user_service.service.api.IAuditService;
 import by.taskManager.user_service.service.component.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -29,44 +31,44 @@ public class AuditAspect {
         AuditDTO audit = new AuditDTO();
         audit.setUuid(UUID.randomUUID());
         audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
+        try {
+            TokenDTO r = userHolder.getUser();
+            audit.setUser(userHolder.getUser());
+        }catch (RuntimeException e){
+            TokenDTO tokenDTO = new TokenDTO();
+            //todo что делать если регистрация происходит без авторизации
+            tokenDTO.setUuid(reterning);
+            tokenDTO.setRole(UserRole.USER);
+            tokenDTO.setFio("new user");
+            tokenDTO.setMail("@");
+            audit.setUser(tokenDTO);
+        }
+
         audit.setText("created new user");
         audit.setType(EssenceType.USER);
         audit.setId(reterning.toString());
-        auditService.saveItem(audit);
+            auditService.saveItem(audit);
+
     }
-    @AfterReturning(value = "execution(* by.taskManager.user_service.service.UserService.upadte(..))",
+    @AfterReturning(value = "execution(* by.taskManager.user_service.service.UserService.update(..))",
             returning = "reterning")
     public void afterUpdateAdvice(UUID reterning){
         AuditDTO audit = new AuditDTO();
         audit.setUuid(UUID.randomUUID());
         audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
+        try {
+            TokenDTO r = userHolder.getUser();
+            audit.setUser(userHolder.getUser());
+        }catch (RuntimeException e){
+            TokenDTO tokenDTO = new TokenDTO();
+            //todo что делать если регистрация происходит без авторизации
+            tokenDTO.setUuid(reterning);
+            tokenDTO.setRole(UserRole.USER);
+            tokenDTO.setFio("new user");
+            tokenDTO.setMail("@");
+            audit.setUser(tokenDTO);
+        }
         audit.setText("updated new user");
-        audit.setType(EssenceType.USER);
-        audit.setId(reterning.toString());
-        auditService.saveItem(audit);
-    }
-    @AfterReturning(value = "execution(* by.taskManager.user_service.service.AuthService.save(..))",
-            returning = "reterning")
-    public void afterRegistrationAdvice(UUID reterning){
-        AuditDTO audit = new AuditDTO();
-        audit.setUuid(UUID.randomUUID());
-        audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
-        audit.setText("registrated new user");
-        audit.setType(EssenceType.USER);
-        audit.setId(reterning.toString());
-        auditService.saveItem(audit);
-    }
-    @AfterReturning(value = "execution(* by.taskManager.user_service.service.AuthService.auth(..))",
-            returning = "reterning")
-    public void afterVerificationAdvice(UUID reterning){
-        AuditDTO audit = new AuditDTO();
-        audit.setUuid(UUID.randomUUID());
-        audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
-        audit.setText("user was verificate");
         audit.setType(EssenceType.USER);
         audit.setId(reterning.toString());
         auditService.saveItem(audit);

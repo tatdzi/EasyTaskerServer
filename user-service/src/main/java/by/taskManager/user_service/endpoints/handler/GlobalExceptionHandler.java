@@ -32,12 +32,14 @@ public class GlobalExceptionHandler {
         exception.setError(new Error(e.getMessage()));
         return new ResponseEntity<>(exception.getErrors(), HttpStatus.BAD_REQUEST);
     }
+
+
     @ExceptionHandler
     public ResponseEntity<StructuredErrorResponse> handler(StrcturedErrorException exception){
         StructuredErrorResponse errorResponse = new StructuredErrorResponse(exception.getErrors());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
+/*
     @ExceptionHandler(value = {
             IOException.class, java.lang.Error.class,
             RuntimeException.class,})
@@ -47,6 +49,10 @@ public class GlobalExceptionHandler {
         exception.setError(new Error(e.getMessage()));
         return new ResponseEntity<>(exception.getErrors(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+ */
+
+
 
 
 }

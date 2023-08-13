@@ -15,11 +15,12 @@ import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.dao.api.IUserData;
 import by.taskManager.user_service.dao.entity.UserEntity;
-import by.taskManager.user_service.service.api.INatificationService;
+import by.taskManager.user_service.service.api.INotificationService;
 import by.taskManager.user_service.service.api.IUserService;
 import by.taskManager.user_service.service.validation.api.Validation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +32,18 @@ import java.util.UUID;
 @Service
 public class UserService implements IUserService {
     private IUserData userData;
-    private Validation<UserCreateDTO> validation;
-    private INatificationService mailService;
+    private Validation validation;
+    private INotificationService mailService;
+    private PasswordEncoder passwordEncoder;
 
-    public UserService(IUserData userData, Validation<UserCreateDTO> validatio, INatificationService mailService) {
+    public UserService(IUserData userData,
+                       Validation validatio,
+                       INotificationService mailService,
+                       PasswordEncoder passwordEncoder) {
         this.userData = userData;
         this.validation = validatio;
         this.mailService =mailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -46,12 +52,14 @@ public class UserService implements IUserService {
         validation.validation(dto);
         UserEntity entity = new UserEntity(dto);
         entity.setUuid(UUID.randomUUID());
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         if (userData.existsByMail(entity.getMail())){
             StrcturedErrorException errorException = new StrcturedErrorException();
             errorException.setError(new StructuredError("mail","Такой адрес электронной почты уже существует"));
             throw errorException;
         }
-        userData.save(entity);
+        userData.saveAndFlush(entity);
+        //todo доработать систему верификации( код верификации хранить в базе данных)
         if (entity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
             MailDetails mailDetails = new MailDetails(entity.getMail(),entity.getUuid());
             mailService.sendLetter(mailDetails);
@@ -62,7 +70,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserEntity get(UUID uuid) {
+    public UserEntity get(UUID uuid) throws NotCorrectUUIDException {
         return userData.findById(uuid).orElseThrow(() ->
                 new NotCorrectUUIDException("Пользователь с таким uuid не найден"));
     }
@@ -80,7 +88,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public UUID upadte(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
+    public UUID update(UserCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         UserEntity entity = userData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");
@@ -88,7 +96,8 @@ public class UserService implements IUserService {
         if (!dto.getMail().equals(entity.getMail())){
             if (userData.existsByMail(entity.getMail())){
                 StrcturedErrorException errorException = new StrcturedErrorException();
-                errorException.setError(new StructuredError("mail","Такой адрес электронной почты уже существует"));
+                errorException.setError(new StructuredError("mail",
+                        "Такой адрес электронной почты уже существует"));
                 throw errorException;
             }
         }
@@ -96,8 +105,8 @@ public class UserService implements IUserService {
         entity.setRole(UserRole.valueOf(dto.getRole()));
         entity.setFio(dto.getFio());
         entity.setMail(dto.getMail());
-        entity.setPassword(dto.getPassword());
-        userData.save(entity);
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        userData.saveAndFlush(entity);
         return entity.getUuid();
     }
 
