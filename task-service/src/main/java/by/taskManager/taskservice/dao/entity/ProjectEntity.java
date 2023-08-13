@@ -7,13 +7,14 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 @Entity
 @Table(name = "project")
 public class ProjectEntity {
+
     @Id
     private UUID uuid;
     @CreationTimestamp
@@ -27,21 +28,20 @@ public class ProjectEntity {
 
     private String name;
     private String discription;
-    @ManyToOne
-    @JoinColumn(name = "manager",referencedColumnName = "uuid")
-    private UserEntity manager;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "project_staff",
-            joinColumns = @JoinColumn(name = "project_uuid",referencedColumnName="uuid"),
-            inverseJoinColumns = @JoinColumn(name = "user_uuid",referencedColumnName="uuid"))
-    private List<UserEntity> staff;
+    private UUID manager;
+    @ElementCollection
+    @CollectionTable(name="project_staff",
+            joinColumns=@JoinColumn(name="project_uuid")
+    )
+    @Column(name = "staff_uuid")
+    private Set<UUID> staff;
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
     public ProjectEntity() {
     }
 
-    public ProjectEntity(UUID uuid, String name, String discription, UserEntity manager, List<UserEntity> staff, ProjectStatus status) {
+    public ProjectEntity(UUID uuid, String name, String discription, UUID manager, Set<UUID> staff, ProjectStatus status) {
         this.uuid = uuid;
         this.name = name;
         this.discription = discription;
@@ -52,15 +52,14 @@ public class ProjectEntity {
     public ProjectEntity(ProjectCreateDTO dto) {
         this.name = dto.getName();
         this.discription = dto.getDiscription();
-        this.manager = new UserEntity(dto.getManager().getUuid());
-        List<UserEntity> list = new ArrayList<>();
+        this.manager = dto.getManager().getUuid();
+        Set<UUID> list = new HashSet<>();
         for (UserRef userRef:dto.getStaff()){
-            list.add(new UserEntity(userRef.getUuid()));
+            list.add(userRef.getUuid());
         }
         this.staff = list;
         this.status = ProjectStatus.valueOf(dto.getStatus());
     }
-
 
     public UUID getUuid() {
         return uuid;
@@ -102,19 +101,19 @@ public class ProjectEntity {
         this.discription = discription;
     }
 
-    public UserEntity getManager() {
+    public UUID getManager() {
         return manager;
     }
 
-    public void setManager(UserEntity manager) {
+    public void setManager(UUID manager) {
         this.manager = manager;
     }
 
-    public List<UserEntity> getStaff() {
+    public Set<UUID> getStaff() {
         return staff;
     }
 
-    public void setStaff(List<UserEntity> staff) {
+    public void setStaff(Set<UUID> staff) {
         this.staff = staff;
     }
 

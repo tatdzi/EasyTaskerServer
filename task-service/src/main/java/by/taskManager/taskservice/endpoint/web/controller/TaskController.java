@@ -20,15 +20,15 @@ public class TaskController {
     public TaskController(ITaskService taskService) {
         this.taskService = taskService;
     }
-    //@PreAuthorize("authenticated()")
-    @PermitAll
+
+    @PreAuthorize("authenticated()")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void doPost(@RequestBody TaskCreateDTO dto){
         taskService.save(dto);
     }
 
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("authentication()")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,

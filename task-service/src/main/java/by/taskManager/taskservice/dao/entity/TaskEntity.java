@@ -20,26 +20,26 @@ public class TaskEntity {
     @UpdateTimestamp
     @Column(name = "dt_update")
     private LocalDateTime dtUpdate;
-
-    private UUID project;
+    @ManyToOne
+    @JoinColumn(name = "project")
+    private ProjectEntity project;
     private String title;
 
     private String discription;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-    @ManyToOne
-    @JoinColumn(name = "implementer",referencedColumnName = "uuid")
-    private UserEntity implementer;
+
+    private UUID implementer;
 
     public TaskEntity() {
     }
 
     public TaskEntity(UUID uuid,
-                      UUID project,
+                      ProjectEntity project,
                       String title,
                       String discription,
                       TaskStatus status,
-                      UserEntity implementer) {
+                      UUID implementer) {
         this.uuid = uuid;
         this.project = project;
         this.title = title;
@@ -72,11 +72,11 @@ public class TaskEntity {
         this.dtUpdate = dtUpdate;
     }
 
-    public UUID getProject() {
+    public ProjectEntity getProject() {
         return project;
     }
 
-    public void setProject(UUID project) {
+    public void setProject(ProjectEntity project) {
         this.project = project;
     }
 
@@ -104,11 +104,11 @@ public class TaskEntity {
         this.status = status;
     }
 
-    public UserEntity getImplementer() {
+    public UUID getImplementer() {
         return implementer;
     }
 
-    public void setImplementer(UserEntity implementer) {
+    public void setImplementer(UUID implementer) {
         this.implementer = implementer;
     }
 }

@@ -1,13 +1,15 @@
 package by.taskManager.taskservice.core.dto;
 
-import by.taskManager.taskservice.core.serializator.LocalDateTimeSerializer;
+import by.TaskManeger.utils.serializator.LocalDateTimeSerializer;
+import by.taskManager.taskservice.core.converter.StringMillisToLocalDateTimeDeserializer;
 import by.taskManager.taskservice.dao.entity.ProjectEntity;
-import by.taskManager.taskservice.dao.entity.UserEntity;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ProjectDTO {
     private String uuid;
@@ -45,10 +47,10 @@ public class ProjectDTO {
         this.dt_update = entity.getDtUpdate();
         this.name = entity.getName();
         this.discription = entity.getDiscription();
-        this.manager = new UserRef(entity.getManager().getUuid());
+        this.manager = new UserRef(entity.getManager());
         List<UserRef> list = new ArrayList<>();
-        for (UserEntity entity1:entity.getStaff()){
-            list.add(new UserRef(entity1.getUuid()));
+        for (UUID entity1:entity.getStaff()){
+            list.add(new UserRef(entity1));
         }
         this.staff = list;
     }

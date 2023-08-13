@@ -8,6 +8,8 @@ public class FilterDTO {
     private List<UserRef> implementers;
     private List<TaskStatus> status;
 
+    public FilterDTO() {
+    }
 
     public FilterDTO(List<ProjectRef> projects,
                      List<UserRef> implementers,
@@ -27,5 +29,17 @@ public class FilterDTO {
 
     public List<TaskStatus> getStatus() {
         return status;
+    }
+
+    public void setProjects(List<ProjectRef> projects) {
+        this.projects = projects;
+    }
+
+    public void setImplementers(List<UserRef> implementers) {
+        this.implementers = implementers;
+    }
+
+    public void setStatus(List<TaskStatus> status) {
+        this.status = status;
     }
 }

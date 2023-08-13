@@ -6,6 +6,7 @@ spring:
     password: taskmanager
     hikari:
       schema: app
+
 server:
   port: 84
 jwt:

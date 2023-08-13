@@ -9,30 +9,52 @@ import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import by.taskManager.taskservice.dao.api.IProjectData;
-import by.taskManager.taskservice.dao.entity.UserEntity;
 import by.taskManager.taskservice.service.api.IProjectService;
+import by.taskManager.taskservice.service.api.IUserService;
+import com.beust.jcommander.internal.Lists;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 @Service
 public class ProjectService implements IProjectService {
     private IProjectData projectData;
+    private IUserService userService;
+
+
     private String ACTIVE = "ACTIVE";
 
-    public ProjectService(IProjectData projectData) {
+    public ProjectService(IProjectData projectData,IUserService userService) {
         this.projectData = projectData;
+        this.userService = userService;
     }
 
+    @Transactional
     @Override
     public UUID save(ProjectCreateDTO dto) {
         ProjectEntity entity = new ProjectEntity(dto);
         entity.setUuid(UUID.randomUUID());
+
+        if (dto.getManager() !=null){
+            userService.checkManager(dto.getManager().getUuid());
+            entity.setManager(dto.getManager().getUuid());
+        }
+        Set<UUID> users = new HashSet<>();
+        if (dto.getStaff()!=null){
+            for (UserRef user:dto.getStaff()){
+                users.add(user.getUuid());
+            }
+            userService.check(users);
+            entity.setStaff(users);
+        }
+        entity.setDiscription(dto.getDiscription());
+        entity.setName(dto.getName());
+        entity.setStatus(ProjectStatus.valueOf(dto.getStatus()));
         projectData.save(entity);
         return entity.getUuid();
     }
@@ -71,14 +93,26 @@ public class ProjectService implements IProjectService {
         }
         entity.setName(dto.getName());
         entity.setDiscription(dto.getDiscription());
-        entity.setManager(new UserEntity(dto.getManager().getUuid()));
-        List<UserEntity> list = new ArrayList<>();
+        entity.setManager(dto.getManager().getUuid());
+        Set<UUID> list = new HashSet<>();
         for (UserRef userRef:dto.getStaff()){
-            list.add(new UserEntity(userRef.getUuid()));
+            list.add(userRef.getUuid());
         }
         entity.setStaff(list);
         entity.setStatus(ProjectStatus.valueOf(dto.getStatus()));
         projectData.save(entity);
         return entity.getUuid();
+    }
+
+    @Override
+    public List<ProjectEntity> getByUser(UUID uuid) {
+        List<ProjectEntity> entities = projectData.findByStaffOrManager(uuid,uuid);
+
+        return entities;
+    }
+
+    @Override
+    public List<ProjectEntity> getAll() {
+        return projectData.findAll();
     }
 }

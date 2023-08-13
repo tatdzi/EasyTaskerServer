@@ -1,7 +1,7 @@
 package by.taskManager.taskservice.core.dto;
 
 
-import by.taskManager.taskservice.core.serializator.LocalDateTimeSerializer;
+import by.TaskManeger.utils.serializator.LocalDateTimeSerializer;
 import by.taskManager.taskservice.dao.entity.TaskEntity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -43,11 +43,11 @@ public class TaskDTO {
         this.uuid = entity.getUuid().toString();
         this.dt_create = entity.getDtCreate();
         this.dt_update = entity.getDtUpdate();
-        this.project = new ProjectRef(entity.getProject());
+        this.project = new ProjectRef(entity.getProject().getUuid());
         this.title = entity.getTitle();
         this.discription = entity.getDiscription();
         this.status = entity.getStatus().toString();
-        this.implementer = new UserRef(entity.getImplementer().getUuid());
+        this.implementer = new UserRef(entity.getImplementer());
     }
 
     public String getUuid() {
