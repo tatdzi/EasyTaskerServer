@@ -11,9 +11,8 @@ import java.time.ZoneOffset;
 public class StringToLocalDateTime implements Converter <String, LocalDateTime> {
 
     @Override
-    public LocalDateTime convert(String time) {
-        Long longTime = Long.decode(time);
-
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(longTime), ZoneOffset.UTC);
+    public LocalDateTime convert(String time1) {
+        Long time  = Long.valueOf(time1);
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneOffset.UTC);
     }
 }

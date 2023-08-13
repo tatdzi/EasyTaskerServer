@@ -6,7 +6,7 @@
 
     <groupId>by.TaskManeger.utils</groupId>
     <artifactId>utils</artifactId>
-    <version>1.0.15-SNAPSHOT</version>
+    <version>1.0.22-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
