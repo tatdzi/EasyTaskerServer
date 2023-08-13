@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tm_audit?ApplicationName=tmAudit
+  cloud:
+    openfeign:
+      client:
+        config:
+          user-service:
+            url: http://localhost:80
+server:
+  port: 82
+
+
