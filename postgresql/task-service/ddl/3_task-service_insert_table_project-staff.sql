@@ -1,5 +1,5 @@
 \c tm_task
-insert into app.project_staff (project_uuid, user_uuid)
+insert into app.project_staff (project_uuid, staff_uuid)
 values
     ('5e2a3369-4806-4409-a269-11e67bb05736','3fa85f64-5717-4562-b3fc-2c963f66afa6'),
     ('5e2a3369-4806-4409-a269-11e67bb05736','3ee93e5e-3393-4ee9-a687-943c6421b935'),
