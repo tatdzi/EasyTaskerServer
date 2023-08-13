@@ -10,6 +10,7 @@ import by.taskManager.auditservice.service.api.ISecurityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,13 @@ public class SecurityService implements ISecurityService {
     public SecurityService(IAuditData auditData) {
         this.auditData = auditData;
     }
-
+    @Override
+    @Transactional
     public void save(AuditDTO audit){
-        auditData.save(new AuditEntity(audit));
+        auditData.saveAndFlush(new AuditEntity(audit));
     }
-
+    @Override
+    @Transactional(readOnly = true)
     public PageDTO getPage(Integer page, Integer size){
         Page<AuditEntity> pageResponse =auditData.findAll(PageRequest.of(page, size));
         List<AuditDTO> auditDTOS = new ArrayList<>();
@@ -41,6 +44,8 @@ public class SecurityService implements ISecurityService {
         }
         return new PageDTO<>(pageResponse,auditDTOS);
     }
+    @Override
+    @Transactional(readOnly = true)
     public AuditDTO getCard(UUID uuid){
         AuditEntity audit = auditData.findById(uuid).
                 orElseThrow(()-> new NotCorrectUUIDException("Пользователь с таким uuid не найден"));

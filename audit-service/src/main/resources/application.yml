@@ -6,9 +6,16 @@ spring:
     password: a7530305
     hikari:
       schema: app
+  cloud:
+    openfeign:
+      client:
+        config:
+          user-service:
+            url: http://localhost:80
 server:
   port: 82
 jwt:
   secret: 0123456789
   issuer: Task Manager
+
 
