@@ -8,4 +8,7 @@ spring:
       schema: app
 server:
   port: 82
+jwt:
+  secret: 0123456789
+  issuer: Task Manager
 

@@ -1,4 +1,4 @@
-package by.taskManager.auditservice.endpoint.service.controller;
+package by.taskManager.auditservice.endpoint.web.controller;
 
 import by.TaskManeger.utils.dto.AuditDTO;
 import by.taskManager.auditservice.service.api.ISecurityService;
