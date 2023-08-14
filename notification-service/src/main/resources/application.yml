@@ -17,6 +17,4 @@ spring:
             enable: true
     protocol: smtps
 verification:
-  url: http://localhost/users/verification
-server:
-  port: 81
+  url: http://user-service:8080/users/verification
