@@ -1,19 +1,19 @@
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          notification-service:
+            url: http://notification-service:8080
+          audit-service:
+            url: http://audit-service:8080
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tm_user?ApplicationName=user
+    url: jdbc:postgresql://db:5432/tm_user?ApplicationName=user
     username: user
     password: uroot
     hikari:
       schema: app
-server:
-  port: 80
 jwt:
   secret: 0123456789
   issuer: Task Manager
-natification-service:
-  url: http://localhost:81
-  name: natification-service
-audit-service:
-  url: http://localhost:82
-  name: audit-service

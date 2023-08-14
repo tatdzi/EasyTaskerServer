@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name ="${natification-service.name}" ,url ="${natification-service.url}")
+@FeignClient(name ="notification-service")
 public interface IFeignClientNotification {
     @RequestMapping(value = "/service/verification",method = RequestMethod.POST)
     ResponseEntity<?> sendLetter(MailDetails mailDetails);
