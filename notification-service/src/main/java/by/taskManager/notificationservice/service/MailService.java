@@ -2,13 +2,14 @@ package by.taskManager.notificationservice.service;
 
 
 import by.TaskManeger.utils.dto.MailDetails;
+import by.taskManager.notificationservice.service.api.IMailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MailService {
+public class MailService implements IMailService {
 
     private JavaMailSender mailSender;
 
@@ -22,7 +23,7 @@ public class MailService {
     public MailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
-
+    @Override
     public void sendVerificationLetter(MailDetails mailDetails){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         String message = String.format(
@@ -34,6 +35,5 @@ public class MailService {
         mailMessage.setText(message);
 
         mailSender.send(mailMessage);
-
     }
 }

@@ -1,0 +1,4 @@
+verification:
+  url: http://localhost/users/verification
+server:
+  port: 81
