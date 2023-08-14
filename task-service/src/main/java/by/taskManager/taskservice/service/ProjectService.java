@@ -11,10 +11,8 @@ import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import by.taskManager.taskservice.dao.api.IProjectData;
 import by.taskManager.taskservice.service.api.IProjectService;
 import by.taskManager.taskservice.service.api.IUserService;
-import com.beust.jcommander.internal.Lists;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,7 +84,7 @@ public class ProjectService implements IProjectService {
     }
     @Transactional
     @Override
-    public UUID upadte(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
+    public UUID update(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         ProjectEntity entity = projectData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");

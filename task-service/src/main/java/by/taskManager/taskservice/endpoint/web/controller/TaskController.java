@@ -21,14 +21,14 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void doPost(@RequestBody TaskCreateDTO dto){
         taskService.save(dto);
     }
 
-    @PreAuthorize("authentication()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -36,29 +36,28 @@ public class TaskController {
                          @RequestParam(name = "project",required = false) List<ProjectRef> projects,
                          @RequestParam(name = "implementer",required = false)List<UserRef> implemeters,
                          @RequestParam(name = "status",required = false)List<TaskStatus> statuses){
-        //todo нужен конвертер для фильтра
         FilterDTO filter = new FilterDTO(projects,implemeters,statuses);
         return taskService.getPage(page,size,filter) ;
     }
 
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     public TaskDTO doGet(@PathVariable UUID uuid){
         return new TaskDTO(taskService.get(uuid));
     }
 
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.PUT,value = "/{uuid}/dt_update/{dt_update}")
     @ResponseStatus(HttpStatus.OK)
     public void doPut(@RequestBody TaskCreateDTO dto,
                       @PathVariable UUID uuid,
                       @PathVariable LocalDateTime dt_update){
-        taskService.upadte(dto,uuid,dt_update);
+        taskService.update(dto,uuid,dt_update);
     }
 
 
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.PATCH,value = "/{uuid}/dt_update/{dt_update}/status/{status}")
     @ResponseStatus(HttpStatus.OK)
     public void doPatch(@PathVariable TaskStatus status,
