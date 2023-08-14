@@ -1,11 +1,19 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tm_audit?ApplicationName=tmAudit
+    url: jdbc:postgresql://db:5432/tm_audit?ApplicationName=tmAudit
     username: audit
     password: a7530305
     hikari:
       schema: app
-server:
-  port: 82
+  cloud:
+    openfeign:
+      client:
+        config:
+          user-service:
+            url: http://user-service:8080
+jwt:
+  secret: 0123456789
+  issuer: Task Manager
+
 

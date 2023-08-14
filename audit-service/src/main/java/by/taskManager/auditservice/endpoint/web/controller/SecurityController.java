@@ -5,7 +5,7 @@ import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.PageDTO;
 import by.taskManager.auditservice.service.api.ISecurityService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -19,13 +19,17 @@ public class SecurityController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<PageDTO> getPage(@RequestParam(name = "page", defaultValue = "0") Integer page,
+    @ResponseStatus(HttpStatus.OK)
+    public PageDTO getPage(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                            @RequestParam(name = "size", defaultValue = "20") Integer size){
-        return new ResponseEntity<>(service.getPage(page,size), HttpStatus.OK) ;
+        return service.getPage(page,size) ;
     }
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/{uuid}",method = RequestMethod.GET)
-    public ResponseEntity<AuditDTO> getCard(@PathVariable UUID uuid){
-        return new ResponseEntity<>(service.getCard(uuid),HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public AuditDTO getCard(@PathVariable UUID uuid){
+        return service.getCard(uuid);
     }
 }
