@@ -11,10 +11,8 @@ import by.taskManager.taskservice.dao.entity.ProjectEntity;
 import by.taskManager.taskservice.dao.api.IProjectData;
 import by.taskManager.taskservice.service.api.IProjectService;
 import by.taskManager.taskservice.service.api.IUserService;
-import com.beust.jcommander.internal.Lists;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
