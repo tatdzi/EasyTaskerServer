@@ -12,7 +12,7 @@ public interface IProjectService {
     UUID save(ProjectCreateDTO dto);
     PageDTO getPage(Integer page, Integer size,Boolean archived);
     ProjectEntity get(UUID uuid);
-    UUID upadte(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update);
+    UUID update(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update);
     List<ProjectEntity> getByUser(UUID uuid);
     List<ProjectEntity> getAll();
 }

@@ -84,7 +84,7 @@ public class ProjectService implements IProjectService {
     }
     @Transactional
     @Override
-    public UUID upadte(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
+    public UUID update(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         ProjectEntity entity = projectData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");

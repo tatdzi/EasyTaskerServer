@@ -26,7 +26,7 @@ public class ProjectController {
     public void doPost(@RequestBody ProjectCreateDTO dto){
         projectService.save(dto);
     }
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -35,7 +35,7 @@ public class ProjectController {
         return projectService.getPage(page,size,archived) ;
     }
 
-    @PreAuthorize("authenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
     @RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     public ProjectDTO doGet(@PathVariable UUID uuid){
@@ -49,6 +49,6 @@ public class ProjectController {
     public void doPut(@RequestBody ProjectCreateDTO dto,
                       @PathVariable UUID uuid,
                       @PathVariable LocalDateTime dt_update){
-        projectService.upadte(dto,uuid,dt_update);
+        projectService.update(dto,uuid,dt_update);
     }
 }

@@ -64,58 +64,21 @@ public class TaskService implements ITaskService {
            }
        }
 
-        taskData.save(entity);
+        taskData.saveAndFlush(entity);
         return entity.getUuid();
     }
     @Transactional(readOnly = true)
     @Override
     public PageDTO getPage(Integer page, Integer size, FilterDTO filter) {
-        TokenDTO user = userHolder.getUser();
-        if (filter == null) {
-            if (user.getRole().equals(UserRole.ADMIN)) {
-                Page<TaskEntity> pageResponse = taskData.findAll(PageRequest.of(page, size));
-                List<TaskDTO> content = new ArrayList<>();
-                for (TaskEntity entity : pageResponse) {
-                    content.add(new TaskDTO(entity));
-                }
-                return new PageDTO<>(pageResponse, content);
-            } else {
-                List<ProjectEntity> projectEntities = projectService.getByUser(user.getUuid());
-                List<ProjectRef> projectRefs1 = new ArrayList<>();
-                for (ProjectEntity entity : projectEntities) {
-                    projectRefs1.add(new ProjectRef(entity.getUuid()));
-                }
-                filter.setProjects(projectRefs1);
-                Page<TaskEntity> pageResponse = taskData.findAll(
-                        where(equalsProject(filter.getProjects())),
-                        PageRequest.of(page, size));
-                List<TaskDTO> content = new ArrayList<>();
-                for (TaskEntity entity : pageResponse) {
-                    content.add(new TaskDTO(entity));
-                }
-                return new PageDTO<>(pageResponse, content);
-            }
-        }
+
+        filter.setProjects(checkAccsesProject(filter.getProjects()));
+
         if (filter.getStatus() == null) {
-            filter.setStatus(List.of(TaskStatus.CLOSE, TaskStatus.BLOCK, TaskStatus.WAIT, TaskStatus.IN_WORK, TaskStatus.DONE));
-        }
-        if (filter.getProjects() == null) {
-            if (user.getRole().equals(UserRole.ADMIN)) {
-                List<ProjectEntity> projectEntities = projectService.getAll();
-                List<ProjectRef> refs = new ArrayList<>();
-                for (ProjectEntity entity:projectEntities){
-                    refs.add(new ProjectRef(entity.getUuid()));
-                }
-                filter.setProjects(refs);
-            }
-            if (!user.getRole().equals(UserRole.ADMIN)) {
-                List<ProjectEntity> projectEntities = projectService.getByUser(user.getUuid());
-                List<ProjectRef> projectRefs1 = new ArrayList<>();
-                for (ProjectEntity entity : projectEntities) {
-                    projectRefs1.add(new ProjectRef(entity.getUuid()));
-                }
-                filter.setProjects(projectRefs1);
-            }
+            filter.setStatus(List.of(TaskStatus.CLOSE,
+                    TaskStatus.BLOCK,
+                    TaskStatus.WAIT,
+                    TaskStatus.IN_WORK,
+                    TaskStatus.DONE));
         }
         if (filter.getImplementers()==null){
             Page<TaskEntity> pageResponse = taskData.findAll(
@@ -129,8 +92,8 @@ public class TaskService implements ITaskService {
             return new PageDTO<>(pageResponse, content);
         }
         Page<TaskEntity> pageResponse = taskData.findAll(
-                where(equalsProject(filter.getProjects())).
-                        and(equalsImplementer(filter.getImplementers()))
+                where(equalsProject(filter.getProjects()))
+                        .and(equalsImplementer(filter.getImplementers()))
                         .and(equalsStatus((filter.getStatus()))),
                 PageRequest.of(page, size));
         List<TaskDTO> content = new ArrayList<>();
@@ -153,13 +116,13 @@ public class TaskService implements ITaskService {
         users.add(entity.getManager());
         TokenDTO user = userHolder.getUser();
         if (!users.contains(user.getUuid())) {
-            //todo ошибка , данный пользователь не имеет прав на получение данной задачи
+            throw new NotCorrectUUIDException("ошибка , данный пользователь не имеет прав на получение данной задачи");
         }
         return task;
     }
     @Transactional
     @Override
-    public UUID upadte(TaskCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
+    public UUID update(TaskCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         TaskEntity entity = taskData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
             throw new DtUpdateNotCorrectException("Этот обьект уже кто-то обновил , обновите страницу и повторите попытку!");
@@ -169,7 +132,7 @@ public class TaskService implements ITaskService {
         entity.setTitle(dto.getTitle());
         entity.setDiscription(dto.getDiscription());
         entity.setStatus(TaskStatus.valueOf(dto.getStatus()));
-        taskData.save(entity);
+        taskData.saveAndFlush(entity);
         return entity.getUuid();
     }
     @Transactional
@@ -177,7 +140,39 @@ public class TaskService implements ITaskService {
     public UUID updateСondition(TaskStatus status, UUID uuid, LocalDateTime dt_update) {
         TaskEntity entity = taskData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         entity.setStatus(status);
-        taskData.save(entity);
+        taskData.saveAndFlush(entity);
         return entity.getUuid();
+    }
+
+    public List<ProjectRef> checkAccsesProject(List<ProjectRef> filter){
+        TokenDTO user = userHolder.getUser();
+        if (filter == null) {
+            if (user.getRole().equals(UserRole.ADMIN)) {
+                List<ProjectEntity> projectEntities = projectService.getAll();
+                List<ProjectRef> refs = new ArrayList<>();
+                for (ProjectEntity entity:projectEntities){
+                    refs.add(new ProjectRef(entity.getUuid()));
+                }
+                filter = refs;
+            }
+            if (!user.getRole().equals(UserRole.ADMIN)) {
+                List<ProjectEntity> projectEntities = projectService.getByUser(user.getUuid());
+                List<ProjectRef> projectRefs1 = new ArrayList<>();
+                for (ProjectEntity entity : projectEntities) {
+                    projectRefs1.add(new ProjectRef(entity.getUuid()));
+                }
+                filter = projectRefs1 ;
+            }
+        }else if (!user.getRole().equals(UserRole.ADMIN)){
+            List<ProjectRef> projectRefs = new ArrayList<>();
+            for (ProjectRef entity : filter) {
+                ProjectEntity project = projectService.get(entity.getUuid());
+                if (project.getManager().equals(user.getUuid()) || project.getStaff().contains(user.getUuid())){
+                    projectRefs.add(new ProjectRef(entity.getUuid()));
+                }
+            }
+            filter = projectRefs;
+        }
+        return filter;
     }
 }

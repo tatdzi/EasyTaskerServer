@@ -13,6 +13,6 @@ public interface ITaskService {
     UUID save(TaskCreateDTO dto);
     PageDTO getPage(Integer page, Integer size, FilterDTO filter);
     TaskEntity get(UUID uuid);
-    UUID upadte(TaskCreateDTO dto, UUID uuid, LocalDateTime dt_update);
+    UUID update(TaskCreateDTO dto, UUID uuid, LocalDateTime dt_update);
     UUID updateСondition(TaskStatus status, UUID uuid, LocalDateTime dt_update);
 }

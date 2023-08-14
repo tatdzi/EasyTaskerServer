@@ -6,6 +6,7 @@ import by.taskManager.taskservice.core.exception.ErrorConnectionToService;
 import by.taskManager.taskservice.endpoint.service.controller.IFeignClientAudit;
 import by.taskManager.taskservice.service.api.IAuditService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,9 +19,6 @@ public class FeignAuditService implements IAuditService {
 
     @Override
     public void saveItem(AuditDTO audit) {
-        HttpStatus status = feignClientAudit.saveItem(audit);
-        if (!status.equals(HttpStatus.OK)){
-            throw new ErrorConnectionToService("Ошибка отправки данных");
-        }
+       feignClientAudit.saveItem(audit);
     }
 }
