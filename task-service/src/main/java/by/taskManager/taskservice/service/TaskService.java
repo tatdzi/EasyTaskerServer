@@ -1,9 +1,12 @@
 package by.taskManager.taskservice.service;
 
+import by.TaskManeger.utils.dto.EssenceType;
 import by.TaskManeger.utils.dto.PageDTO;
 import by.TaskManeger.utils.dto.TokenDTO;
 import by.TaskManeger.utils.dto.UserRole;
 import by.TaskManeger.utils.error.StructuredError;
+import by.taskManager.taskservice.aop.aspect.Audit;
+import by.taskManager.taskservice.aop.aspect.AuditType;
 import by.taskManager.taskservice.core.dto.*;
 import by.taskManager.taskservice.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.taskservice.core.exception.NotCorrectUUIDException;
@@ -39,6 +42,7 @@ public class TaskService implements ITaskService {
     }
     @Transactional
     @Override
+    @Audit(action = AuditType.CREATE_TASK, type = EssenceType.TASK)
     public UUID save(TaskCreateDTO dto) {
        TaskEntity entity = new TaskEntity();
        entity.setDiscription(dto.getDiscription());
@@ -122,6 +126,7 @@ public class TaskService implements ITaskService {
     }
     @Transactional
     @Override
+    @Audit(action = AuditType.UPDATE_TASK, type = EssenceType.TASK)
     public UUID update(TaskCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         TaskEntity entity = taskData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){
@@ -137,6 +142,7 @@ public class TaskService implements ITaskService {
     }
     @Transactional
     @Override
+    @Audit(action = AuditType.UPDATE_STATUS_OF_TASK, type = EssenceType.TASK)
     public UUID updateСondition(TaskStatus status, UUID uuid, LocalDateTime dt_update) {
         TaskEntity entity = taskData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         entity.setStatus(status);
