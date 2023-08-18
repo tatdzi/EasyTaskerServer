@@ -31,6 +31,10 @@ public class GlobalExceptionHandler {
         exception.setError(new Error(e.getMessage()));
         return new ResponseEntity<>(exception.getErrors(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler
+    public ResponseEntity<List<Error>> handler(ErrorResponseException e){
+        return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler
     public ResponseEntity<StructuredErrorResponse> handler(StrcturedErrorException exception){
@@ -48,5 +52,9 @@ public class GlobalExceptionHandler {
         exception.setError(new Error("Сервер не смог корректно обработать запрос. Пожалуйста обратитесь к администратору"));
         exception.setError(new Error(e.getMessage()));
         return new ResponseEntity<>(exception.getErrors(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler
+    public ResponseEntity<List<Error>> handler(ErrorResponseExceptionBad e){
+        return new ResponseEntity<>(e.getErrors(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

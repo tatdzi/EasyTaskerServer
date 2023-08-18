@@ -1,6 +1,9 @@
 package by.taskManager.taskservice.service;
 
+import by.TaskManeger.utils.dto.EssenceType;
 import by.TaskManeger.utils.dto.PageDTO;
+import by.taskManager.taskservice.aop.aspect.Audit;
+import by.taskManager.taskservice.aop.aspect.AuditType;
 import by.taskManager.taskservice.core.dto.ProjectCreateDTO;
 import by.taskManager.taskservice.core.dto.ProjectDTO;
 import by.taskManager.taskservice.core.dto.ProjectStatus;
@@ -31,6 +34,7 @@ public class ProjectService implements IProjectService {
 
     @Transactional
     @Override
+    @Audit(action = AuditType.CREATE_PROJECT, type = EssenceType.PROJECT)
     public UUID save(ProjectCreateDTO dto) {
         ProjectEntity entity = new ProjectEntity(dto);
         entity.setUuid(UUID.randomUUID());
@@ -81,6 +85,7 @@ public class ProjectService implements IProjectService {
     }
     @Transactional
     @Override
+    @Audit(action = AuditType.UPDATED_PROJECT, type = EssenceType.PROJECT)
     public UUID update(ProjectCreateDTO dto, UUID uuid, LocalDateTime dt_update) {
         ProjectEntity entity = projectData.findById(uuid).orElseThrow(()->new IllegalArgumentException("не нашел"));
         if (!entity.getDtUpdate().equals(dt_update)){

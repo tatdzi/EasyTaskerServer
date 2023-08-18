@@ -12,6 +12,10 @@ public class StrcturedErrorException extends RuntimeException{
         this.errors = new ArrayList<>();
     }
 
+    public StrcturedErrorException(List<StructuredError> errors) {
+        this.errors = errors;
+    }
+
     public List<StructuredError> getErrors() {
         return errors;
     }

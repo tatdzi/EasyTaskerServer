@@ -6,10 +6,13 @@ import by.TaskManeger.utils.dto.TokenDTO;
 import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.taskservice.service.api.IAuditService;
 import by.taskManager.taskservice.service.component.UserHolder;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -25,67 +28,20 @@ public class AuditAspect {
         this.userHolder = userHolder;
     }
 
-    @AfterReturning(value = "execution(* by.taskManager.taskservice.service.ProjectService.save(..))",
+    @AfterReturning(value = "@annotation(Audit)",
             returning = "reterning")
-    public void afterSaveProjectAdvice(UUID reterning){
+    public void afterSaveProjectAdvice(JoinPoint joinPoint, UUID reterning){
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Audit type = method.getAnnotation(Audit.class);
         AuditDTO audit = new AuditDTO();
         audit.setUuid(UUID.randomUUID());
         audit.setDtCreate(LocalDateTime.now());
         audit.setUser(userHolder.getUser());
-        audit.setText("created new project");
-        audit.setType(EssenceType.USER);
+        audit.setText(type.action().getDescription());
+        audit.setType(type.type());
         audit.setId(reterning.toString());
             auditService.saveItem(audit);
-
-    }
-    @AfterReturning(value = "execution(* by.taskManager.taskservice.service.TaskService.save(..))",
-            returning = "reterning")
-    public void afterSaveTaskAdvice(UUID reterning){
-        AuditDTO audit = new AuditDTO();
-        audit.setUuid(UUID.randomUUID());
-        audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
-        audit.setText("created new task");
-        audit.setType(EssenceType.USER);
-        audit.setId(reterning.toString());
-        auditService.saveItem(audit);
-
-    }
-    @AfterReturning(value = "execution(* by.taskManager.taskservice.service.ProjectService.update(..))",
-            returning = "reterning")
-    public void afterUpdateProjectAdvice(UUID reterning){
-        AuditDTO audit = new AuditDTO();
-        audit.setUuid(UUID.randomUUID());
-        audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
-        audit.setText("updated project");
-        audit.setType(EssenceType.USER);
-        audit.setId(reterning.toString());
-        auditService.saveItem(audit);
-    }
-    @AfterReturning(value = "execution(* by.taskManager.taskservice.service.TaskService.update(..))",
-            returning = "reterning")
-    public void afterUpdateTaskAdvice(UUID reterning){
-        AuditDTO audit = new AuditDTO();
-        audit.setUuid(UUID.randomUUID());
-        audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
-        audit.setText("updated task");
-        audit.setType(EssenceType.USER);
-        audit.setId(reterning.toString());
-        auditService.saveItem(audit);
-    }
-    @AfterReturning(value = "execution(* by.taskManager.taskservice.service.TaskService.updateСondition(..))",
-            returning = "reterning")
-    public void afterUpdateTaskStatusAdvice(UUID reterning){
-        AuditDTO audit = new AuditDTO();
-        audit.setUuid(UUID.randomUUID());
-        audit.setDtCreate(LocalDateTime.now());
-        audit.setUser(userHolder.getUser());
-        audit.setText("updated status task");
-        audit.setType(EssenceType.USER);
-        audit.setId(reterning.toString());
-        auditService.saveItem(audit);
     }
 }
 
