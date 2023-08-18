@@ -57,10 +57,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         UserDTO user = userService.getInfo(header);
         TokenDTO tokenDTO = new TokenDTO(
-                UUID.fromString(user.getUuid()),
+                UUID.fromString(user.getUuid().toString()),
                 user.getMail(),
                 user.getFio(),
-                UserRole.valueOf(user.getRole())
+                UserRole.valueOf(user.getRole().toString())
         );
 
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
