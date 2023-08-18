@@ -3,7 +3,6 @@ package by.taskManager.user_service.endpoints.web.controller;
 import by.TaskManeger.utils.dto.TokenDTO;
 import by.TaskManeger.utils.dto.UserDTO;
 import by.taskManager.user_service.core.dto.LoginDTO;
-import by.taskManager.user_service.core.dto.TokenRef;
 import by.taskManager.user_service.core.dto.UserRegistrationDTO;
 import by.taskManager.user_service.endpoints.handler.JwtTokenHandler;
 import by.taskManager.user_service.service.api.IAuthService;
@@ -42,9 +41,9 @@ public class AuthController {
     @PermitAll
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public TokenRef login(@RequestBody LoginDTO login){
+    public String login(@RequestBody LoginDTO login){
        TokenDTO token = authService.login(login);
-        return new TokenRef(jwtTokenHandler.generateAccessToken(token));
+        return jwtTokenHandler.generateAccessToken(token);
     }
 
     @PreAuthorize("isAuthenticated()")

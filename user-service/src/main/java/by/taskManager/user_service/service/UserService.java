@@ -59,7 +59,6 @@ public class UserService implements IUserService {
             throw errorException;
         }
         userData.saveAndFlush(entity);
-        //todo доработать систему верификации( код верификации хранить в базе данных)
         if (entity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
             MailDetails mailDetails = new MailDetails(entity.getMail(),entity.getUuid());
             mailService.sendLetter(mailDetails);
