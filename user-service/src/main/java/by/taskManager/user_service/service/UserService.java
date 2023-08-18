@@ -5,11 +5,11 @@ package by.taskManager.user_service.service;
 
 import by.TaskManeger.utils.dto.MailDetails;
 import by.TaskManeger.utils.dto.PageDTO;
+import by.TaskManeger.utils.dto.UserDTO;
 import by.TaskManeger.utils.dto.UserRole;
 import by.TaskManeger.utils.error.StructuredError;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.dto.UserDTO;
-import by.taskManager.user_service.core.dto.UserStatus;
+import by.TaskManeger.utils.dto.UserStatus;
 import by.taskManager.user_service.core.exception.DtUpdateNotCorrectException;
 import by.taskManager.user_service.core.exception.NotCorrectUUIDException;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
@@ -81,7 +81,13 @@ public class UserService implements IUserService {
         Page<UserEntity> pageResponse = userData.findAll(PageRequest.of(page, size));
         List<UserDTO> content = new ArrayList<>();
         for (UserEntity entity:pageResponse){
-            content.add(new UserDTO(entity));
+            content.add(new UserDTO(entity.getUuid(),
+                    entity.getDtUpdate(),
+                    entity.getDtCreate(),
+                    entity.getMail(),
+                    entity.getFio(),
+                    entity.getRole(),
+                    entity.getStatus()));
         }
         return new PageDTO<>(pageResponse,content);
     }
@@ -101,8 +107,8 @@ public class UserService implements IUserService {
                 throw errorException;
             }
         }
-        entity.setStatus(UserStatus.valueOf(dto.getStatus()));
-        entity.setRole(UserRole.valueOf(dto.getRole()));
+        entity.setStatus(UserStatus.valueOf(dto.getStatus().toString()));
+        entity.setRole(UserRole.valueOf(dto.getRole().toString()));
         entity.setFio(dto.getFio());
         entity.setMail(dto.getMail());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));

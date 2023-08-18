@@ -1,15 +1,17 @@
 package by.taskManager.user_service.core.dto;
 
+import by.TaskManeger.utils.dto.UserRole;
+import by.TaskManeger.utils.dto.UserStatus;
 import by.taskManager.user_service.dao.entity.UserEntity;
 
 public class UserCreateDTO {
     private String mail;
     private String fio;
-    private String role;
-    private String status;
+    private UserRole role;
+    private UserStatus status;
     private String password;
 
-    public UserCreateDTO(String mail, String fio, String role, String status, String password) {
+    public UserCreateDTO(String mail, String fio, UserRole role, UserStatus status, String password) {
         this.mail = mail;
         this.fio = fio;
         this.role = role;
@@ -19,18 +21,11 @@ public class UserCreateDTO {
     public UserCreateDTO(UserEntity entity) {
         this.mail = entity.getMail();
         this.fio = entity.getFio();
-        this.role = entity.getRole().toString();
-        this.status = entity.getStatus().toString();
+        this.role = entity.getRole();
+        this.status = entity.getStatus();
         this.password = entity.getPassword();
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getMail() {
         return mail;
@@ -40,15 +35,23 @@ public class UserCreateDTO {
         return fio;
     }
 
-    public String getRole() {
+    public String getPassword() {
+        return password;
+    }
+
+    public UserRole getRole() {
         return role;
     }
 
-    public String getStatus() {
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public UserStatus getStatus() {
         return status;
     }
 
-    public String getPassword() {
-        return password;
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

@@ -7,7 +7,7 @@ import by.TaskManeger.utils.error.StructuredError;
 import by.taskManager.user_service.core.dto.LoginDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.core.dto.UserRegistrationDTO;
-import by.taskManager.user_service.core.dto.UserStatus;
+import by.TaskManeger.utils.dto.UserStatus;
 import by.taskManager.user_service.core.exception.StrcturedErrorException;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IAuthService;
@@ -36,8 +36,8 @@ public class AuthService implements IAuthService {
         UserCreateDTO user = new UserCreateDTO(
                 dto.getMail(),
                 dto.getFio(),
-                UserRole.USER.toString(),
-                UserStatus.WAITING_ACTIVATION.toString(),
+                UserRole.USER,
+                UserStatus.WAITING_ACTIVATION,
                 dto.getPassword()
         );
         return userService.save(user);
@@ -58,13 +58,13 @@ public class AuthService implements IAuthService {
         String mail = userHolder.getUser().getMail();
         UserEntity entity = userService.get(mail);
         UserDTO user = new UserDTO(
-                entity.getUuid().toString(),
+                entity.getUuid(),
                 entity.getDtCreate(),
                 entity.getDtUpdate(),
                 entity.getMail(),
                 entity.getFio(),
-                entity.getRole().toString(),
-                entity.getStatus().toString()
+                entity.getRole(),
+                entity.getStatus()
         );
         return user;
     }

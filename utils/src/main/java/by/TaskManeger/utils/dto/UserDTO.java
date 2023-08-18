@@ -3,45 +3,51 @@ package by.TaskManeger.utils.dto;
 
 import by.TaskManeger.utils.serializator.LocalDateTimeSerializer;
 import by.TaskManeger.utils.serializator.StringDeserializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class UserDTO {
-    private String uuid;
+    private UUID uuid;
+
+    @JsonProperty("dt_create")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
-    private LocalDateTime dt_create;
+    private LocalDateTime dtCreate;
+
+    @JsonProperty("dt_update")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = StringDeserializer.class)
-    private LocalDateTime dt_update;
+    private LocalDateTime dtUpdate;
     private String mail;
     private String fio;
-    private String role;
-    private String status;
+    private UserRole role;
+    private UserStatus status;
 
     public UserDTO() {
     }
 
-    public UserDTO(String uuid, LocalDateTime dt_update, LocalDateTime dt_create, String mail, String fio, String role, String status) {
+    public UserDTO(UUID uuid, LocalDateTime dt_update, LocalDateTime dt_create, String mail, String fio, UserRole role, UserStatus status) {
         this.uuid = uuid;
-        this.dt_create = dt_create;
-        this.dt_update = dt_update;
+        this.dtCreate = dt_create;
+        this.dtUpdate = dt_update;
         this.mail = mail;
         this.fio = fio;
         this.role = role;
         this.status = status;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
     public LocalDateTime getDt_create() {
-        return dt_create;
+        return dtCreate;
     }
     public LocalDateTime getDt_update() {
-        return dt_update;
+        return dtUpdate;
     }
     public String getMail() {
         return mail;
@@ -49,23 +55,23 @@ public class UserDTO {
     public String getFio() {
         return fio;
     }
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
-    public void setDt_create(LocalDateTime dt_create) {
-        this.dt_create = dt_create;
+    public void setDtCreate(LocalDateTime dt_create) {
+        this.dtCreate = dt_create;
     }
 
-    public void setDt_update(LocalDateTime dt_update) {
-        this.dt_update = dt_update;
+    public void setDtUpdate(LocalDateTime dt_update) {
+        this.dtUpdate = dt_update;
     }
 
     public void setMail(String mail) {
@@ -76,11 +82,11 @@ public class UserDTO {
         this.fio = fio;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 }

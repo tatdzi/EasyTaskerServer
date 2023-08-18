@@ -2,7 +2,7 @@ package by.taskManager.user_service.dao.entity;
 
 import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.dto.UserStatus;
+import by.TaskManeger.utils.dto.UserStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -42,8 +42,8 @@ public class UserEntity {
         this.mail = dto.getMail();
         this.password = dto.getPassword();
         this.fio = dto.getFio();
-        this.role = UserRole.valueOf(dto.getRole());
-        this.status = UserStatus.valueOf(dto.getStatus());
+        this.role = UserRole.valueOf(dto.getRole().toString());
+        this.status = UserStatus.valueOf(dto.getStatus().toString());
     }
 
 

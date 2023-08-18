@@ -5,9 +5,24 @@ public class UserRegistrationDTO {
     private String fio;
     private String password;
 
+    public UserRegistrationDTO() {
+    }
+
     public UserRegistrationDTO(String mail, String fio, String password) {
         this.mail = mail;
         this.fio = fio;
+        this.password = password;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setFio(String fio) {
+        this.fio = fio;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 

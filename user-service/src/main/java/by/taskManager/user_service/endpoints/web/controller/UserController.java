@@ -2,8 +2,9 @@ package by.taskManager.user_service.endpoints.web.controller;
 
 
 import by.TaskManeger.utils.dto.PageDTO;
+import by.TaskManeger.utils.dto.UserDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
-import by.taskManager.user_service.core.dto.UserDTO;
+import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +39,14 @@ private IUserService userService;
     @RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO doGet(@PathVariable UUID uuid){
-        return new UserDTO(userService.get(uuid));
+        UserEntity entity = userService.get(uuid);
+        return new UserDTO(entity.getUuid(),
+                entity.getDtUpdate(),
+                entity.getDtCreate(),
+                entity.getMail(),
+                entity.getFio(),
+                entity.getRole(),
+                entity.getStatus());
     }
 
 
