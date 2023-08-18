@@ -6,6 +6,7 @@ spring:
     password: a7530305
     hikari:
       schema: app
+      maximum-pool-size: 5
   cloud:
     openfeign:
       client:

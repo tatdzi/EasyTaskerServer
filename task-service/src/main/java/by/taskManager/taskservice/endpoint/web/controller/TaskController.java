@@ -21,14 +21,14 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void doPost(@RequestBody TaskCreateDTO dto){
         taskService.save(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public PageDTO doGet(@RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -40,14 +40,14 @@ public class TaskController {
         return taskService.getPage(page,size,filter) ;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     public TaskDTO doGet(@PathVariable UUID uuid){
         return new TaskDTO(taskService.get(uuid));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.PUT,value = "/{uuid}/dt_update/{dt_update}")
     @ResponseStatus(HttpStatus.OK)
     public void doPut(@RequestBody TaskCreateDTO dto,
@@ -57,7 +57,7 @@ public class TaskController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','USER')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.PATCH,value = "/{uuid}/dt_update/{dt_update}/status/{status}")
     @ResponseStatus(HttpStatus.OK)
     public void doPatch(@PathVariable TaskStatus status,

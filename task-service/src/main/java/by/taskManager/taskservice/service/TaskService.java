@@ -111,11 +111,11 @@ public class TaskService implements ITaskService {
     public TaskEntity get(UUID uuid) {
         TaskEntity task = taskData.findById(uuid).orElseThrow(() ->
                 new NotCorrectUUIDException("Задача не найдена"));
-        ProjectEntity entity = projectService.get(task.getUuid());
+        ProjectEntity entity = projectService.get(task.getProject().getUuid());
         Set<UUID> users = entity.getStaff();
         users.add(entity.getManager());
         TokenDTO user = userHolder.getUser();
-        if (!users.contains(user.getUuid())) {
+        if (!users.contains(user.getUuid()) && !userHolder.getUser().getRole().equals(UserRole.ADMIN)) {
             throw new NotCorrectUUIDException("ошибка , данный пользователь не имеет прав на получение данной задачи");
         }
         return task;

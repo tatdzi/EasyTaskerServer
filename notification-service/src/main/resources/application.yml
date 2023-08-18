@@ -18,3 +18,5 @@ spring:
     protocol: smtps
 verification:
   url: http://user-service:8080/users/verification
+server:
+  port: 8080
