@@ -2,7 +2,7 @@ version: '3.5'
 services:
   db:
     build: postgresql
-    image: taskmanager_postgresql:1.0.20
+    image: taskmanager_postgresql:1.1.7
     restart: always
     environment:
       POSTGRES_USER: root
@@ -11,7 +11,7 @@ services:
       - taskmanager_ntwrk
   pgadmin:
     build: pgadmin
-    image: taskmanager_pgadmin:1.0.0
+    image: taskmanager_pgadmin:1.0.1
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -22,7 +22,7 @@ services:
       - taskmanager_ntwrk
   swagger-ui:
     build: swagger-ui
-    image: taskmanager_swagger-ui:1.0.0
+    image: taskmanager_swagger-ui:1.0.1
     ports:
       - "81:8080"
     networks:
@@ -30,27 +30,27 @@ services:
 
   user-service:
     build: user-service
-    image: taskmanager_user-service:1.0.0
+    image: taskmanager_user-service:1.0.10
     networks:
       - taskmanager_ntwrk
   audit-service:
     build: audit-service
-    image: taskmanager_audit-service:1.0.0
+    image: taskmanager_audit-service:1.0.4
     networks:
       - taskmanager_ntwrk
   notification-service:
     build: notification-service
-    image: taskmanager_notification-service:1.0.0
+    image: taskmanager_notification-service:1.0.4
     networks:
       - taskmanager_ntwrk
   task-service:
     build: task-service
-    image: taskmanager_task-service:1.0.0
+    image: taskmanager_task-service:1.0.8
     networks:
       - taskmanager_ntwrk
   proxy:
     build: proxy
-    image: taskmanager_proxy:1.0.0
+    image: taskmanager_proxy:1.0.4
     ports:
       - "80:80"
     networks:

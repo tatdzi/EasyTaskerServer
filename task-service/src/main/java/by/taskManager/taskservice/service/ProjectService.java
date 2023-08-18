@@ -24,9 +24,6 @@ public class ProjectService implements IProjectService {
     private IProjectData projectData;
     private IUserService userService;
 
-
-    private String ACTIVE = "ACTIVE";
-
     public ProjectService(IProjectData projectData,IUserService userService) {
         this.projectData = projectData;
         this.userService = userService;
@@ -67,7 +64,7 @@ public class ProjectService implements IProjectService {
             }
             return new PageDTO<>(pageResponse,content);
         }
-        Page<ProjectEntity> pageResponse = projectData.findByStatusIs(PageRequest.of(page, size),ACTIVE);
+        Page<ProjectEntity> pageResponse = projectData.findByStatusIs(PageRequest.of(page, size),ProjectStatus.ACTIVE);
         List<ProjectDTO> content = new ArrayList<>();
         for (ProjectEntity entity:pageResponse){
             content.add(new ProjectDTO(entity));

@@ -45,9 +45,10 @@ public class AuthService implements IAuthService {
     @Override
     public TokenDTO login(LoginDTO login){
         UserEntity entity = userService.get(login.getMail());
-        if (!passwordEncoder.matches(login.getPassword(),entity.getPassword())){
+        if (!this.passwordEncoder.matches(login.getPassword(),entity.getPassword())){
             StrcturedErrorException errorException = new StrcturedErrorException();
             errorException.setError(new StructuredError("password","wrong password"));
+            throw errorException;
         }
         return new TokenDTO(entity.getUuid(),entity.getMail(),entity.getFio(),entity.getRole());
     }

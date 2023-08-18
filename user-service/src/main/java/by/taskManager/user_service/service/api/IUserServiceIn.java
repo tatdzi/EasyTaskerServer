@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface IUserServiceIn {
     void check(List<UUID> items);
-    void checkManager(UUID manager);
+    void checkManager(UUID admin);
 }

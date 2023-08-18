@@ -26,8 +26,8 @@ public class UserServiceService implements IUserServiceIn {
     }
 
     @Override
-    public void checkManager(UUID manager) {
-        UserEntity user = userService.get(manager);
+    public void checkManager(UUID admin) {
+        UserEntity user = userService.get(admin);
         if (!user.getRole().equals(UserRole.MANAGER)){
             throw new NotCorrectUUIDException("Пользователь не являетя Менеджером");
         }
