@@ -6,6 +6,7 @@ import by.TaskManeger.utils.dto.UserDTO;
 import by.taskManager.user_service.core.dto.UserCreateDTO;
 import by.taskManager.user_service.dao.entity.UserEntity;
 import by.taskManager.user_service.service.api.IUserService;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,12 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 private IUserService userService;
+private ConversionService conversionService;
 
-    public UserController(IUserService userService) {
+    public UserController(IUserService userService,
+                          ConversionService conversionService) {
         this.userService = userService;
+        this.conversionService = conversionService;
     }
     @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
@@ -27,6 +31,7 @@ private IUserService userService;
     public void doPost(@RequestBody UserCreateDTO dto){
         userService.save(dto);
     }
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
@@ -40,13 +45,7 @@ private IUserService userService;
     @ResponseStatus(HttpStatus.OK)
     public UserDTO doGet(@PathVariable UUID uuid){
         UserEntity entity = userService.get(uuid);
-        return new UserDTO(entity.getUuid(),
-                entity.getDtUpdate(),
-                entity.getDtCreate(),
-                entity.getMail(),
-                entity.getFio(),
-                entity.getRole(),
-                entity.getStatus());
+        return conversionService.convert(entity,UserDTO.class);
     }
 
 
