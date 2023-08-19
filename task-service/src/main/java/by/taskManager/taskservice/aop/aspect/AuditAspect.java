@@ -1,9 +1,6 @@
 package by.taskManager.taskservice.aop.aspect;
 
 import by.TaskManeger.utils.dto.AuditDTO;
-import by.TaskManeger.utils.dto.EssenceType;
-import by.TaskManeger.utils.dto.TokenDTO;
-import by.TaskManeger.utils.dto.UserRole;
 import by.taskManager.taskservice.service.api.IAuditService;
 import by.taskManager.taskservice.service.component.UserHolder;
 import org.aspectj.lang.JoinPoint;

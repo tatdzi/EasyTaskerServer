@@ -1,6 +1,7 @@
 package by.taskManager.notificationservice.service;
 
 
+
 import by.TaskManeger.utils.dto.MailDetails;
 import by.taskManager.notificationservice.service.api.IMailService;
 import org.springframework.beans.factory.annotation.Value;

@@ -19,6 +19,7 @@ import by.taskManager.taskservice.service.api.ITaskService;
 import by.taskManager.taskservice.service.component.UserHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,32 +75,15 @@ public class TaskService implements ITaskService {
     @Transactional(readOnly = true)
     @Override
     public PageDTO getPage(Integer page, Integer size, FilterDTO filter) {
-
         filter.setProjects(checkAccsesProject(filter.getProjects()));
-
-        if (filter.getStatus() == null) {
-            filter.setStatus(List.of(TaskStatus.CLOSE,
-                    TaskStatus.BLOCK,
-                    TaskStatus.WAIT,
-                    TaskStatus.IN_WORK,
-                    TaskStatus.DONE));
+        Specification<TaskEntity> where = where(equalsProject(filter.getProjects()));
+        if (filter.getStatus() != null) {
+            where.and(equalsStatus((filter.getStatus())));
         }
-        if (filter.getImplementers()==null){
-            Page<TaskEntity> pageResponse = taskData.findAll(
-                    where(equalsProject(filter.getProjects()))
-                            .and(equalsStatus((filter.getStatus()))),
-                    PageRequest.of(page, size));
-            List<TaskDTO> content = new ArrayList<>();
-            for (TaskEntity entity : pageResponse) {
-                content.add(new TaskDTO(entity));
-            }
-            return new PageDTO<>(pageResponse, content);
+        if (filter.getImplementers()!=null){
+            where.and(equalsImplementer(filter.getImplementers()));
         }
-        Page<TaskEntity> pageResponse = taskData.findAll(
-                where(equalsProject(filter.getProjects()))
-                        .and(equalsImplementer(filter.getImplementers()))
-                        .and(equalsStatus((filter.getStatus()))),
-                PageRequest.of(page, size));
+        Page<TaskEntity> pageResponse = taskData.findAll(where, PageRequest.of(page, size));
         List<TaskDTO> content = new ArrayList<>();
         for (TaskEntity entity : pageResponse) {
             content.add(new TaskDTO(entity));

@@ -11,6 +11,9 @@ public class UserCreateDTO {
     private UserStatus status;
     private String password;
 
+    public UserCreateDTO() {
+    }
+
     public UserCreateDTO(String mail, String fio, UserRole role, UserStatus status, String password) {
         this.mail = mail;
         this.fio = fio;
@@ -43,15 +46,27 @@ public class UserCreateDTO {
         return role;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
     public UserStatus getStatus() {
         return status;
     }
 
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setFio(String fio) {
+        this.fio = fio;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
