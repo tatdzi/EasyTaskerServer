@@ -1,8 +1,5 @@
 package by.taskManager.user_service.service;
 
-
-
-
 import by.TaskManeger.utils.dto.MailDetails;
 import by.TaskManeger.utils.dto.PageDTO;
 import by.TaskManeger.utils.dto.UserDTO;
@@ -110,7 +107,11 @@ public class UserService implements IUserService {
         entity.setRole(UserRole.valueOf(dto.getRole().toString()));
         entity.setFio(dto.getFio());
         entity.setMail(dto.getMail());
-        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (!entity.getPassword().equals(dto.getPassword())){
+            entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }else {
+            entity.setPassword(dto.getPassword());
+        }
         userData.saveAndFlush(entity);
         return entity.getUuid();
     }
