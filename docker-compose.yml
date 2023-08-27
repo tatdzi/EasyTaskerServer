@@ -30,7 +30,7 @@ services:
 
   user-service:
     build: user-service
-    image: taskmanager_user-service:1.1.1
+    image: taskmanager_user-service:1.1.2
     networks:
       - taskmanager_ntwrk
   audit-service:
