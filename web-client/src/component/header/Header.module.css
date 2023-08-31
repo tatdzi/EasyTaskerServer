@@ -1,0 +1,12 @@
+.header{
+    grid-area: h;
+    background: #c8f208;
+    text-align: center;
+    padding: 20px ;
+}
+.header img{
+    width: 100px;
+}
+.login{
+    float: right;
+}

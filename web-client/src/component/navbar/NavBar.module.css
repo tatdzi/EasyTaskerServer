@@ -1,0 +1,20 @@
+.navbar{
+    background: bisque;
+    text-align: center;
+    padding: 10px;
+}
+.nav{
+    grid-area: n;
+    background: #70bd6b;
+}
+.link{
+    color: gold;
+}
+.item a{
+    text-decoration: none;
+    color: white;
+}
+
+.item a.activelink{
+    color: gold;
+}
