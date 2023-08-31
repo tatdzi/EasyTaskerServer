@@ -8,6 +8,7 @@ import Tasks from "./component/tasks/Tasks";
 import Audit from "./component/audit/Audit";
 import Login from "./component/login/Login";
 import Users from "./component/users/Users";
+import Footer from "./component/footer/Footer";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                   <Route path='/users' element={<Users/>}/>
               </Routes>
           </div>
+          <Footer/>
       </div>
   )
 }
