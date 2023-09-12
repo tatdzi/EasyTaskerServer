@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          audit-service:
+            url: http://localhost:82
+          user-service:
+            url: http://localhost:80
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tm_task?ApplicationName=task
+server:
+  port: 84

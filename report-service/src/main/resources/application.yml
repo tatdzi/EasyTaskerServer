@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          audit-service:
+            url: http://audit-service:8080
+          user-service:
+            url: http://user-service:8080
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/tm_task?ApplicationName=task
+    username: task
+    password: taskmanager
+    hikari:
+      schema: app
+      maximum-pool-size: 5
+jwt:
+  secret: 0123456789
+  issuer: Task Manager
