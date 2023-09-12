@@ -15,6 +15,11 @@ spring:
     hikari:
       schema: app
       maximum-pool-size: 5
+minio:
+  bucket: audit-report
+  url: http://minio:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
 jwt:
   secret: 0123456789
   issuer: Task Manager

@@ -2,7 +2,7 @@ version: '3.5'
 services:
   db:
     build: postgresql
-    image: taskmanager_postgresql:1.1.8
+    image: taskmanager_postgresql:1.1.9
     restart: always
     environment:
       POSTGRES_USER: root
@@ -50,34 +50,21 @@ services:
       - taskmanager_ntwrk
   proxy:
     build: proxy
-    image: taskmanager_proxy:1.0.20
+    image: taskmanager_proxy:1.0.23
     ports:
       - "80:80"
     networks:
       - taskmanager_ntwrk
-  report-service:
-    depends_on:
-      - db
-      - minio
-    build: report-service
-    image: taskmanager_report-service:1.0.0
-    networks:
-      - taskmanager_ntwrk
-    environment:
-      spring.datasource.url: jdbc:postgresql://db:5432/report_service?ApplicationName=Report_Service
-      spring.datasource.username: root
-      spring.datasource.password: root
-      app.network.user_service.address: user-service:8080
-      app.network.audit_service.address: audit-service:8080
-      app.network.minio.host: minio:9000
   minio:
-    image: bitnami/minio
+    image: minio/minio
+    container_name: minio
     ports:
       - "9000:9000"
-      - "9001:9001"
+      - "9090:9090"
     environment:
-      MINIO_ROOT_USER: minio_user
-      MINIO_ROOT_PASSWORD: minio_password
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server ~/minio --console-address :9090
     networks:
       - taskmanager_ntwrk
 networks:
