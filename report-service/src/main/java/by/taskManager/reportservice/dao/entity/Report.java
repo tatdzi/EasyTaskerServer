@@ -19,12 +19,12 @@ import java.util.UUID;
 public class Report {
     @Id
     private UUID uuid;
-    @CreationTimestamp(source = SourceType.DB)
-    @Column(name = "create_date", precision = 3)
+    @CreationTimestamp
+    @Column(name = "create_date")
     private LocalDateTime createDate;
-    @UpdateTimestamp(source = SourceType.DB)
+    @UpdateTimestamp
     @Version
-    @Column(name = "update_date", precision = 3)
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

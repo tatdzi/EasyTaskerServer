@@ -2,11 +2,13 @@ package by.taskManager.reportservice.core.dto;
 
 import by.TaskManeger.utils.serializator.LocalDateTimeSerializer;
 import by.TaskManeger.utils.serializator.StringDeserializer;
+import by.taskManager.reportservice.dao.entity.Report;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 public class ReportDTO {
@@ -23,7 +25,7 @@ public class ReportDTO {
     private ReportStatus status;
     private ReportType type;
     private String description;
-    private ReportParamAudit params;
+    private Map<String,Object> params;
 
     public ReportDTO() {
     }
@@ -34,7 +36,7 @@ public class ReportDTO {
                      ReportStatus status,
                      ReportType type,
                      String description,
-                     ReportParamAudit params) {
+                     Map<String,Object> params) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -43,7 +45,15 @@ public class ReportDTO {
         this.description = description;
         this.params = params;
     }
-
+    public ReportDTO(Report report) {
+        this.uuid = report.getUuid();
+        this.dtCreate = report.getCreateDate();
+        this.dtUpdate = report.getUpdateDate();
+        this.status = report.getStatus();
+        this.type = report.getType();
+        this.description = report.getDescription();
+        this.params = report.getParam();
+    }
     public UUID getUuid() {
         return uuid;
     }
@@ -92,11 +102,11 @@ public class ReportDTO {
         this.description = description;
     }
 
-    public ReportParamAudit getParams() {
+    public Map<String,Object> getParams() {
         return params;
     }
 
-    public void setParams(ReportParamAudit params) {
+    public void setParams(Map<String,Object> params) {
         this.params = params;
     }
 }

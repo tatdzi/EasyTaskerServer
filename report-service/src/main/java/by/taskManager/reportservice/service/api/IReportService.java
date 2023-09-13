@@ -11,5 +11,5 @@ public interface IReportService {
     UUID create(Map<String,Object> param, ReportType type);
     PageDTO getPage(Integer page, Integer size);
     FileDTO download(UUID uuid);
-    UUID isReady(UUID uuid);
+    boolean isReady(UUID uuid);
 }
