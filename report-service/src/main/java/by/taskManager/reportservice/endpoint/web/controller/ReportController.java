@@ -49,13 +49,12 @@ public class ReportController {
 
 
     @RequestMapping(method = RequestMethod.HEAD, value = "/{uuid}/export")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> checkIfReady(@PathVariable UUID uuid) {
-
-        boolean reportAvailable = reportService.isReady(uuid);
-
-        if (reportAvailable) {
+        boolean is = this.reportService.isReady(uuid);
+        if (is){
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        }else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }

@@ -1,7 +1,8 @@
 package by.taskManager.reportservice.endpoint.service.controller;
 
+
 import by.TaskManeger.utils.dto.AuditDTO;
-import by.taskManager.reportservice.core.dto.ReportParamAudit;
+import by.TaskManeger.utils.dto.ReportParamAudit;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

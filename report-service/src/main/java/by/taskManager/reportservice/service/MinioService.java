@@ -5,10 +5,12 @@ import by.taskManager.reportservice.core.dto.FileDTO;
 import by.taskManager.reportservice.service.api.IMinioService;
 import io.minio.*;
 import org.apache.commons.compress.utils.IOUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+@Service
 
 public class MinioService implements IMinioService {
     private final MinioClient minioClient;
