@@ -4,12 +4,15 @@ import by.taskManager.reportservice.config.property.MinioProperties;
 import by.taskManager.reportservice.core.dto.FileDTO;
 import by.taskManager.reportservice.service.api.IMinioService;
 import io.minio.*;
+import io.minio.http.Method;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
+
 @Service
 
 public class MinioService implements IMinioService {
@@ -39,16 +42,18 @@ public class MinioService implements IMinioService {
         return fileName;
     }
     @Override
-    public FileDTO download(String fileName){
+    public String download(String fileName){
         try {
-            GetObjectArgs args = GetObjectArgs.builder()
-                    .bucket(this.minioProperties.getBucket())
-                    .object(fileName)
-                    .build();
-            InputStream is = this.minioClient.getObject(args);
-            byte[] content = IOUtils.toByteArray(is);
-            is.close();
-            return new FileDTO(fileName, content);
+            String url =
+                    minioClient.getPresignedObjectUrl(
+                            GetPresignedObjectUrlArgs.builder()
+                                    .method(Method.GET)
+                                    .bucket(minioProperties.getBucket())
+                                    .object(fileName+".xlsx")
+                                    .expiry(5, TimeUnit.MINUTES)
+                                    .build());
+
+            return url;
         } catch (Exception e) {
             throw new RuntimeException();
         }

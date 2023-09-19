@@ -6,5 +6,5 @@ import java.io.File;
 
 public interface IMinioService {
     String upload(File report);
-    FileDTO download(String fileName);
+    String download(String fileName);
 }

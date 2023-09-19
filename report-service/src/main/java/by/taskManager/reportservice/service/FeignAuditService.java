@@ -18,7 +18,7 @@ public class FeignAuditService implements IAuditService {
 
     @Override
     public List<AuditDTO> getList(ReportParamAudit paramAudit) {
-        ResponseEntity<List<AuditDTO>> response= feignClientAudit.getList(paramAudit);
+        ResponseEntity<List<AuditDTO>> response = feignClientAudit.getList(paramAudit);
         return response.getBody();
     }
 }

@@ -40,25 +40,32 @@ public class ReportService implements IReportService {
     @Override
     public UUID create(Map<String, Object> param, ReportType type) {
         if(type.equals(ReportType.JOURNAL_AUDIT)) {
-            ReportParamAudit params = new ReportParamAudit(
-                    (UUID)param.get("uuid"),
-                    (LocalDateTime) param.get("from"),
-                    (LocalDateTime)param.get("to")
-            );
-            List<AuditDTO> auditDTOList = auditService.getList(params);
-            Report report = new Report();
-            report.setUuid(UUID.randomUUID());
-            report.setType(type);
-            if (param.containsKey("from") && param.containsKey("to")) {
-                report.setDescription("Журнал Аудита за : " + param.get("from") + " - " + param.get("to"));
+            try {
+                ReportParamAudit params = new ReportParamAudit(
+                        UUID.fromString((String) param.get("uuid")),
+                        (LocalDateTime) param.get("from"),
+                        (LocalDateTime)param.get("to")
+                );
+                List<AuditDTO> auditDTOList = auditService.getList(params);
+                Report report = new Report();
+                report.setUuid(UUID.randomUUID());
+                report.setType(type);
+                report.setDiscription(null);
+                report.setParam(param);
+                if (param.containsKey("from") && param.containsKey("to")) {
+                    report.setDiscription("Журнал Аудита за : " + param.get("from") + " - " + param.get("to"));
+                }
+                report.setStatus(ReportStatus.PROGRESS);
+                File reportFile = generateAudit(auditDTOList,report.getUuid());
+                minioService.upload(reportFile);
+                report.setStatus(ReportStatus.DONE);
+                reportData.save(report);
+                return report.getUuid();
+            }catch (RuntimeException e){
+                throw new RuntimeException("create report error");
             }
-            report.setStatus(ReportStatus.LOADED);
-            File reportFile = generateAudit(auditDTOList,report.getUuid());
-            minioService.upload(reportFile);
-            reportData.save(report);
-            return report.getUuid();
         }
-        return null;
+        throw new RuntimeException("not so type report");
     }
     @Transactional(readOnly = true)
     @Override
@@ -72,9 +79,9 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public FileDTO download(UUID uuid) {
+    public String download(UUID uuid) {
         Report report = this.reportData.findById(uuid)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new RuntimeException("123"));
         String fileName = report.getUuid().toString();
         return this.minioService.download(fileName);
     }
@@ -116,8 +123,9 @@ public class ReportService implements IReportService {
                 dataRow.createCell(5).setCellValue(auditDTO.getText());
                 dataRow.createCell(6).setCellValue(auditDTO.getType().toString());
                 dataRow.createCell(7).setCellValue(auditDTO.getId());
-                dataRow.createCell(8).setCellValue(auditDTO.getDtCreate());
+                dataRow.createCell(8).setCellValue(auditDTO.getDtCreate().toString());
             }
+
             try (FileOutputStream fos = new FileOutputStream(reportFile)) {
                 workbook.write(fos);
             }

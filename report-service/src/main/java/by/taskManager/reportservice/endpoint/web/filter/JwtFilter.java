@@ -43,6 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+
         if (isEmpty(header) || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
@@ -51,8 +52,9 @@ public class JwtFilter extends OncePerRequestFilter {
         final String token = header.split(" ")[1].trim();
         if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
-            return;
+           return;
         }
+
 
         UserDTO user = userService.getInfo(header);
         TokenDTO tokenDTO = new TokenDTO(
@@ -71,6 +73,9 @@ public class JwtFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         chain.doFilter(request, response);
+
     }
+
 }

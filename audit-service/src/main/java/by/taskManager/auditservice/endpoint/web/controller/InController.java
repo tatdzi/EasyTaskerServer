@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/service")
 public class InController {
     private ISecurityService service;
@@ -24,19 +24,22 @@ public class InController {
         this.conversionService = conversionService;
     }
 
-    @PermitAll
+
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void save(@RequestBody AuditDTO audit){
         service.save(audit);
     }
-    @PermitAll
+
     @RequestMapping(value = "/get",method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public List<AuditDTO> get(@RequestBody ReportParamAudit paramAudit){
         List<AuditDTO> dtos = new ArrayList<>();
-        for (AuditEntity entity:service.getList(paramAudit)){
-            dtos.add(conversionService.convert(entity,AuditDTO.class));
+        List<AuditEntity> entities = service.getList(paramAudit);
+        if (!entities.isEmpty()) {
+            for (AuditEntity entity : entities) {
+                dtos.add(conversionService.convert(entity, AuditDTO.class));
+            }
         }
         return dtos;
     }

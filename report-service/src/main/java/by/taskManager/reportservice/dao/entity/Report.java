@@ -15,37 +15,37 @@ import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reports")
+@Table(name = "report")
 public class Report {
     @Id
     private UUID uuid;
     @CreationTimestamp
-    @Column(name = "create_date")
+    @Column(name = "dt_create")
     private LocalDateTime createDate;
     @UpdateTimestamp
     @Version
-    @Column(name = "update_date")
+    @Column(name = "dt_update")
     private LocalDateTime updateDate;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private ReportStatus status;
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     private ReportType type;
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "discription")
+    private String discription;
     @Type(JsonType.class)
-    @Column(name = "param", nullable = false)
+    @Column(name = "param")
     private Map<String, Object> param;
 
     public Report() {
     }
 
-    public Report(UUID uuid, ReportStatus status, ReportType type, String description, Map<String, Object> param) {
+    public Report(UUID uuid, ReportStatus status, ReportType type, String discription, Map<String, Object> param) {
         this.uuid = uuid;
         this.status = status;
         this.type = type;
-        this.description = description;
+        this.discription = discription;
         this.param = param;
     }
 
@@ -74,11 +74,11 @@ public class Report {
     }
 
     public String getDescription() {
-        return description;
+        return discription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDiscription(String description) {
+        this.discription = description;
     }
 
     public Map<String, Object> getParam() {

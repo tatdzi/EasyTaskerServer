@@ -3,7 +3,7 @@ create schema if not exists app;
 alter schema app owner to root;
 grant usage on schema app to "report";
 
-create table if not exists app.reports
+create table if not exists app.report
 (
     uuid         uuid         not null,
     dt_create    timestamp(3) not null,
@@ -15,6 +15,6 @@ create table if not exists app.reports
     constraint project_pkey
         primary key (uuid)
 );
-alter table app.project owner to root;
-grant insert, select, update on app.project to "report";
+alter table app.report owner to root;
+grant insert, select, update on app.report to "report";
 

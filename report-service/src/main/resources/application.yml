@@ -9,9 +9,9 @@ spring:
             url: http://user-service:8080
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/tm_task?ApplicationName=task
-    username: task
-    password: taskmanager
+    url: jdbc:postgresql://db:5432/tm_report?ApplicationName=report
+    username: report
+    password: report_user
     hikari:
       schema: app
       maximum-pool-size: 5
