@@ -77,6 +77,7 @@ public class UserService implements IUserService {
     }
 
 
+
     @Override
     @Transactional(readOnly = true)
     public UserEntity get(UUID uuid) throws NotCorrectUUIDException {

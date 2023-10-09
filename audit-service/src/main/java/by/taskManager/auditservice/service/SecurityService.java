@@ -2,16 +2,20 @@ package by.taskManager.auditservice.service;
 
 import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.PageDTO;
+import by.TaskManeger.utils.dto.ReportParamAudit;
 import by.TaskManeger.utils.dto.TokenDTO;
 import by.taskManager.auditservice.core.exception.NotCorrectUUIDException;
 import by.taskManager.auditservice.dao.api.IAuditData;
 import by.taskManager.auditservice.dao.entity.AuditEntity;
+import by.taskManager.auditservice.dao.spetifications.AuditSpecifications;
 import by.taskManager.auditservice.service.api.ISecurityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -57,6 +61,24 @@ public class SecurityService implements ISecurityService {
                 audit.getType(),
                 audit.getId());
         return dto;
+    }
+
+    @Override
+    public List<AuditEntity> getList(ReportParamAudit param) {
+        if (param.getUser() == null && param.getFrom() == null && param.getTo() == null ){
+           return auditData.findAll();
+        }
+        Specification<AuditEntity> specification = Specification.where(null);
+        if (param.getUser() != null) {
+            specification = specification.and(AuditSpecifications.byUser(param.getUser()));
+        }
+        if (param.getFrom() != null){
+            specification = specification.and(AuditSpecifications.byDateFrom(param.getFrom().atTime(0,0,0)));
+        }
+        if (param.getTo() != null){
+            specification = specification.and(AuditSpecifications.byDateTo(param.getTo().atTime(0,0,0)));
+        }
+        return auditData.findAll(specification);
     }
 
 

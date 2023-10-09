@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          audit-service:
+            url: http://audit-service:8080
+          user-service:
+            url: http://user-service:8080
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/tm_report?ApplicationName=report
+    username: report
+    password: report_user
+    hikari:
+      schema: app
+      maximum-pool-size: 5
+minio:
+  bucket: audit-report
+  url: http://minio:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+jwt:
+  secret: 0123456789
+  issuer: Task Manager

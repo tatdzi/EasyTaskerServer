@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          audit-service:
+            url: http://localhost:82
+          user-service:
+            url: http://localhost:80
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tm_report?ApplicationName=report
+    username: postgres
+    password: postgres
+minio:
+  bucket: audit-report
+  url: http://localhost:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+server:
+  port: 86

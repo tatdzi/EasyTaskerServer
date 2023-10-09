@@ -13,5 +13,8 @@ COPY task-service/ddl/2_task-service_insert_table_project.sql /docker-entrypoint
 COPY task-service/ddl/3_task-service_insert_table_project-staff.sql /docker-entrypoint-initdb.d
 COPY task-service/ddl/4_task-service_insert_table_task.sql /docker-entrypoint-initdb.d
 
+COPY report-service/ddl/0_report-service_init_database.sql /docker-entrypoint-initdb.d
+COPY report-service/ddl/1_report-service_init_table.sql /docker-entrypoint-initdb.d
+
 
 
