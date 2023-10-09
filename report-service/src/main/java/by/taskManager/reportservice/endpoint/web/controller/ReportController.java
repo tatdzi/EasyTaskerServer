@@ -25,7 +25,7 @@ public class ReportController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method = RequestMethod.POST,value = "/{type}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void doPost(@RequestBody Map<String,Object> param, @PathVariable ReportType type){
+    public void doPost(@RequestBody Map<String,String> param, @PathVariable ReportType type){
         reportService.create(param,type);
     }
     @PreAuthorize("hasAnyRole('ADMIN')")

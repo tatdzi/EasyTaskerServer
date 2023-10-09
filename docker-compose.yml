@@ -2,7 +2,7 @@ version: '3.5'
 services:
   db:
     build: postgresql
-    image: taskmanager_postgresql:1.1.9
+    image: taskmanager_postgresql:1.1.10
     restart: always
     environment:
       POSTGRES_USER: root
@@ -22,7 +22,7 @@ services:
       - taskmanager_ntwrk
   swagger-ui:
     build: swagger-ui
-    image: taskmanager_swagger-ui:1.0.1
+    image: taskmanager_swagger-ui:1.0.2
     ports:
       - "81:8080"
     networks:
@@ -30,32 +30,32 @@ services:
 
   user-service:
     build: user-service
-    image: taskmanager_user-service:1.1.3
+    image: taskmanager_user-service:1.1.4
     networks:
       - taskmanager_ntwrk
   audit-service:
     build: audit-service
-    image: taskmanager_audit-service:1.1.1
+    image: taskmanager_audit-service:1.1.2
     networks:
       - taskmanager_ntwrk
   notification-service:
     build: notification-service
-    image: taskmanager_notification-service:1.0.6
+    image: taskmanager_notification-service:1.0.7
     networks:
       - taskmanager_ntwrk
   task-service:
     build: task-service
-    image: taskmanager_task-service:1.1.1
+    image: taskmanager_task-service:1.1.2
     networks:
       - taskmanager_ntwrk
   report-service:
     build: report-service
-    image: taskmanager_report-service:1.0.0
+    image: taskmanager_report-service:1.0.1
     networks:
       - taskmanager_ntwrk
   proxy:
     build: proxy
-    image: taskmanager_proxy:1.0.23
+    image: taskmanager_proxy:1.0.27
     ports:
       - "80:80"
     networks:
@@ -70,6 +70,13 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     command: server ~/minio --console-address :9090
+    networks:
+      - taskmanager_ntwrk
+  web-client:
+    build: web-client
+    image: taskmanager_web-client:1.0.1
+    ports:
+      - "84:3000"
     networks:
       - taskmanager_ntwrk
 networks:

@@ -1,17 +1,18 @@
 package by.TaskManeger.utils.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class ReportParamAudit {
     private UUID user;
-    private LocalDateTime from;
-    private LocalDateTime to;
+    private LocalDate from;
+    private LocalDate to;
 
     public ReportParamAudit() {
     }
 
-    public ReportParamAudit(UUID user, LocalDateTime from, LocalDateTime to) {
+    public ReportParamAudit(UUID user, LocalDate from, LocalDate to) {
         this.user = user;
         this.from = from;
         this.to = to;
@@ -25,19 +26,19 @@ public class ReportParamAudit {
         this.user = user;
     }
 
-    public LocalDateTime getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public void setFrom(LocalDateTime from) {
+    public void setFrom(LocalDate from) {
         this.from = from;
     }
 
-    public LocalDateTime getTo() {
+    public LocalDate getTo() {
         return to;
     }
 
-    public void setTo(LocalDateTime to) {
+    public void setTo(LocalDate to) {
         this.to = to;
     }
 }

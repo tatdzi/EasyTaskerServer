@@ -1,52 +1,40 @@
 package by.taskManager.reportservice.service;
 
-import by.TaskManeger.utils.dto.AuditDTO;
 import by.TaskManeger.utils.dto.PageDTO;
-import by.TaskManeger.utils.dto.ReportParamAudit;
 import by.taskManager.reportservice.core.dto.*;
 import by.taskManager.reportservice.dao.api.IReportData;
 import by.taskManager.reportservice.dao.entity.Report;
-import by.taskManager.reportservice.service.api.IAuditService;
 import by.taskManager.reportservice.service.api.IMinioService;
 import by.taskManager.reportservice.service.api.IReportService;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 @Service
+@Transactional(readOnly = true)
 public class ReportService implements IReportService {
     private IReportData reportData;
-    private IAuditService auditService;
     private IMinioService minioService;
 
-    public ReportService(IReportData reportData,IAuditService auditService,IMinioService minioService) {
+    public ReportService(IReportData reportData,IMinioService minioService) {
         this.reportData = reportData;
-        this.auditService = auditService;
         this.minioService = minioService;
     }
     @Transactional
     @Override
-    public UUID create(Map<String, Object> param, ReportType type) {
+    public UUID save(Report report) {
+        reportData.saveAndFlush(report);
+        return report.getUuid();
+    }
+
+    @Transactional
+    @Override
+    public UUID create(Map<String, String> param, ReportType type) {
         if(type.equals(ReportType.JOURNAL_AUDIT)) {
-            try {
-                ReportParamAudit params = new ReportParamAudit(
-                        UUID.fromString((String) param.get("uuid")),
-                        (LocalDateTime) param.get("from"),
-                        (LocalDateTime)param.get("to")
-                );
-                List<AuditDTO> auditDTOList = auditService.getList(params);
                 Report report = new Report();
                 report.setUuid(UUID.randomUUID());
                 report.setType(type);
@@ -55,19 +43,20 @@ public class ReportService implements IReportService {
                 if (param.containsKey("from") && param.containsKey("to")) {
                     report.setDiscription("Журнал Аудита за : " + param.get("from") + " - " + param.get("to"));
                 }
-                report.setStatus(ReportStatus.PROGRESS);
-                File reportFile = generateAudit(auditDTOList,report.getUuid());
-                minioService.upload(reportFile);
-                report.setStatus(ReportStatus.DONE);
+                report.setStatus(ReportStatus.LOADED);
                 reportData.save(report);
                 return report.getUuid();
-            }catch (RuntimeException e){
-                throw new RuntimeException("create report error");
-            }
         }
         throw new RuntimeException("not so type report");
     }
-    @Transactional(readOnly = true)
+
+    @Override
+    public Report get(UUID uuid) {
+        Report report = reportData.findById(uuid).orElseThrow(() ->
+                new RuntimeException("Задача не найдена"));
+        return report;
+    }
+
     @Override
     public PageDTO getPage(Integer page, Integer size) {
         Page<Report> pageResponse = reportData.findAll(PageRequest.of(page, size));
@@ -82,7 +71,7 @@ public class ReportService implements IReportService {
     public String download(UUID uuid) {
         Report report = this.reportData.findById(uuid)
                 .orElseThrow(() -> new RuntimeException("123"));
-        String fileName = report.getUuid().toString();
+        String fileName = report.getUuid().toString()+".xlsx";
         return this.minioService.download(fileName);
     }
 
@@ -96,43 +85,9 @@ public class ReportService implements IReportService {
         return true;
     }
 
-    public File generateAudit(List<AuditDTO> audit, UUID name) {
-        File reportFile = new File(name + ".xlsx");
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Audit Report");
-
-            Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("UUID");
-            headerRow.createCell(1).setCellValue("User");
-            headerRow.createCell(2).setCellValue("Mail");
-            headerRow.createCell(3).setCellValue("Fio");
-            headerRow.createCell(4).setCellValue("Role");
-            headerRow.createCell(5).setCellValue("Text");
-            headerRow.createCell(6).setCellValue("Type");
-            headerRow.createCell(7).setCellValue("ID");
-            headerRow.createCell(8).setCellValue("Date Created");
-
-            for (int i = 0; i < audit.size(); i++) {
-                AuditDTO auditDTO = audit.get(i);
-                Row dataRow = sheet.createRow(i + 1);
-                dataRow.createCell(0).setCellValue(auditDTO.getUuid().toString());
-                dataRow.createCell(1).setCellValue(auditDTO.getUser().getUuid().toString());
-                dataRow.createCell(2).setCellValue(auditDTO.getUser().getMail());
-                dataRow.createCell(3).setCellValue(auditDTO.getUser().getFio());
-                dataRow.createCell(4).setCellValue(auditDTO.getUser().getRole().toString());
-                dataRow.createCell(5).setCellValue(auditDTO.getText());
-                dataRow.createCell(6).setCellValue(auditDTO.getType().toString());
-                dataRow.createCell(7).setCellValue(auditDTO.getId());
-                dataRow.createCell(8).setCellValue(auditDTO.getDtCreate().toString());
-            }
-
-            try (FileOutputStream fos = new FileOutputStream(reportFile)) {
-                workbook.write(fos);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-        return reportFile;
+    @Override
+    public List<Report> getList(ReportStatus status) {
+        return reportData.findByStatus(status);
     }
 }
 

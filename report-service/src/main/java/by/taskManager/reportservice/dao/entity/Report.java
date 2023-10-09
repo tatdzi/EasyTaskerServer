@@ -36,12 +36,12 @@ public class Report {
     private String discription;
     @Type(JsonType.class)
     @Column(name = "param")
-    private Map<String, Object> param;
+    private Map<String, String> param;
 
     public Report() {
     }
 
-    public Report(UUID uuid, ReportStatus status, ReportType type, String discription, Map<String, Object> param) {
+    public Report(UUID uuid, ReportStatus status, ReportType type, String discription, Map<String, String> param) {
         this.uuid = uuid;
         this.status = status;
         this.type = type;
@@ -81,11 +81,11 @@ public class Report {
         this.discription = description;
     }
 
-    public Map<String, Object> getParam() {
+    public Map<String, String> getParam() {
         return param;
     }
 
-    public void setParam(Map<String, Object> param) {
+    public void setParam(Map<String, String> param) {
         this.param = param;
     }
 

@@ -25,7 +25,7 @@ public class ReportDTO {
     private ReportStatus status;
     private ReportType type;
     private String description;
-    private Map<String,Object> params;
+    private Map<String,String> params;
 
     public ReportDTO() {
     }
@@ -36,7 +36,7 @@ public class ReportDTO {
                      ReportStatus status,
                      ReportType type,
                      String description,
-                     Map<String,Object> params) {
+                     Map<String,String> params) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -102,11 +102,11 @@ public class ReportDTO {
         this.description = description;
     }
 
-    public Map<String,Object> getParams() {
+    public Map<String,String> getParams() {
         return params;
     }
 
-    public void setParams(Map<String,Object> params) {
+    public void setParams(Map<String,String> params) {
         this.params = params;
     }
 }

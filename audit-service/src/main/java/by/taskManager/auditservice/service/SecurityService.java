@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,10 +73,10 @@ public class SecurityService implements ISecurityService {
             specification = specification.and(AuditSpecifications.byUser(param.getUser()));
         }
         if (param.getFrom() != null){
-            specification = specification.and(AuditSpecifications.byDateFrom(param.getFrom()));
+            specification = specification.and(AuditSpecifications.byDateFrom(param.getFrom().atTime(0,0,0)));
         }
         if (param.getTo() != null){
-            specification = specification.and(AuditSpecifications.byDateTo(param.getTo()));
+            specification = specification.and(AuditSpecifications.byDateTo(param.getTo().atTime(0,0,0)));
         }
         return auditData.findAll(specification);
     }
