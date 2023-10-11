@@ -1,7 +1,9 @@
 .header{
     grid-area: h;
-    background: #c8f208;
+    background: #baf595;
+    font-size: 30px;
     text-align: center;
+    margin-top: 20px;
     padding: 20px ;
 }
 .header img{

@@ -1,11 +1,12 @@
-.app-wraper{
+.area{
     display: grid;
     grid-template-areas:
-  "h"
-  "b"
-  "f";
-    grid-template-rows:90px 1fr ;
+  "n b";
+    grid-template-columns: 1fr 1fr ;
     grid-gap: 10px;
     margin: auto;
     width: auto;
+}
+.switch{
+    grid-area: b;
 }

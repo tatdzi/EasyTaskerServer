@@ -1,4 +1,5 @@
 import React from "react";
+import style from "./Login.module.css"
 import {Field, reduxForm} from "redux-form";
 import {connect} from "react-redux";
 import {loginThunk} from "../../redux/AuthReduser";
@@ -30,7 +31,7 @@ const Login= (props) =>{
         return (<Navigate to={'/profile'} />)
     }
     return(
-        <div>
+        <div className={style.login}>
             <h1>Login</h1>
             <LoginReduxForm onSubmit={onSubmit}/>
         </div>
